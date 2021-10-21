@@ -1,0 +1,139 @@
+package kr.or.ddit.survey.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import kr.or.ddit.login.vo.EmpVO;
+import kr.or.ddit.survey.service.SurveyService;
+import kr.or.ddit.survey.vo.SurveyVO;
+import kr.or.ddit.todo.vo.TodoVO;
+import lombok.extern.slf4j.Slf4j;
+
+@RequestMapping("/survey")
+@Slf4j
+@Controller
+public class SurveyController {
+	private static final Logger logger = LoggerFactory.getLogger(SurveyController.class);
+	
+	@Autowired
+	SurveyService ss;
+	
+	// 설문 홈
+	@GetMapping("/home")
+	public String surveyHome(Model model, HttpSession session) {
+		String empno = "";
+		if(session.getAttribute("empVo") != null) {
+			EmpVO empVO = (EmpVO) session.getAttribute("empVo");
+			empno = empVO.getEmpno();
+		}
+		
+		List<SurveyVO> AllsurveyListRspnsN = ss.AllsurveyListRspnsN(empno);
+		List<SurveyVO> surveyLatelyList = ss.surveyLatelyList(empno);
+		
+		model.addAttribute("surveyListRspnsN", AllsurveyListRspnsN);
+		model.addAttribute("surveyLatelyList", surveyLatelyList);
+		
+		return "survey/surveyHome";
+	}
+	
+	// 설문 작성 화면
+	@GetMapping("/create")
+	public String surveyCreate() {
+		return "survey/surveyCreate";
+	}
+	
+	// 설문 작성
+	@PostMapping("/create")
+	public String surveyCreatePost(@ModelAttribute SurveyVO surveyVO) {
+		logger.info("설문 작성 vo : " + surveyVO);
+		
+		int result = ss.createQustnr(surveyVO);
+		
+		if(result > 0) {
+			return "redirect:/survey/home";
+		}else {
+			return "redirect:/survey/create";
+		}
+	}
+	
+	// 설문 임시저장
+	@PostMapping("/save")
+	public String surveySavePost(@ModelAttribute SurveyVO surveyVO) {
+		logger.info("설문 작성 vo : " + surveyVO);
+		
+		int result = ss.saveQustnr(surveyVO);
+		
+		if(result > 0) {
+			return "redirect:/survey/mine";
+		}else {
+			return "redirect:/survey/create";
+		}
+	}
+	
+	// 설문 상세 조회
+	@GetMapping("/detail")
+	public String surveyDetail() {
+		return "survey/surveyDetail";
+	}
+	
+	// 진행중인 설문 화면
+	@GetMapping("/run")
+	public String surveyRun(Model model, HttpSession session) {
+		String empno = "";
+		if(session.getAttribute("empVo") != null) {
+			EmpVO empVO = (EmpVO) session.getAttribute("empVo");
+			empno = empVO.getEmpno();
+		}
+		
+		List<SurveyVO> runSurveyList = ss.runSurveyList(empno);
+		logger.info("진행중인 설문 : " + runSurveyList);
+		
+		model.addAttribute("runSurveyList", runSurveyList);
+		
+		return "survey/surveyRun";
+	}
+	
+	// 마감된 설문 화면
+	@GetMapping("/done")
+	public String surveyDone(Model model, HttpSession session) {
+		String empno = "";
+		if(session.getAttribute("empVo") != null) {
+			EmpVO empVO = (EmpVO) session.getAttribute("empVo");
+			empno = empVO.getEmpno();
+		}
+		
+		List<SurveyVO> doneSurveyList = ss.doneSurveyList(empno);
+		logger.info("마감된 설문 : " + doneSurveyList);
+		
+		model.addAttribute("doneSurveyList", doneSurveyList);
+		return "survey/surveyDone";
+	}
+	
+	// 내가 만든 설문 화면
+	@GetMapping("/mine")
+	public String surveyMine(Model model, HttpSession session) {
+		String empno = "";
+		if(session.getAttribute("empVo") != null) {
+			EmpVO empVO = (EmpVO) session.getAttribute("empVo");
+			empno = empVO.getEmpno();
+		}
+		
+		List<SurveyVO> mineSurveyList = ss.mineSurveyList(empno);
+		logger.info("내가만든 설문 : " + mineSurveyList);
+		
+		model.addAttribute("mineSurveyList", mineSurveyList);
+		return "survey/surveyMine";
+	}
+}

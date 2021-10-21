@@ -1,0 +1,68 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.community.mapper.CommuMapper">
+	<!-- 커뮤니티 만들기 -->
+	<insert id="comInsert" parameterType="kr.or.ddit.community.vo.CommuVO">
+		<selectKey keyProperty="cmmntyNo" order="BEFORE" resultType="int" >
+			SELECT NVL(MAX(CMMNTY_NO), 0) + 1 FROM TB_CMMNTY
+		</selectKey>
+		INSERT INTO TB_CMMNTY (CMMNTY_NO, ESTBL_EMPNO, SJ, CN, RCRIT_AT)
+		VALUES
+		(
+		    #{cmmntyNo}
+		    ,#{estblEmpno}
+		    ,#{sj}
+		    ,#{cn}
+		    ,#{rcritAt}
+		)
+	</insert>
+	<!-- 커뮤니티 목록 -->
+	<select id="comList" resultType="kr.or.ddit.community.vo.CommuVO">	
+		SELECT ROW_NUMBER() OVER(ORDER BY CMMNTY_NO DESC) RNUM
+			, N.CMMNTY_NO
+			, N.ESTBL_EMPNO
+			, E.NM
+			, N.SJ
+			, N.CN
+			, N.RCRIT_AT
+			, N.ESTBL_TM
+		FROM TB_CMMNTY N, TB_EMPL E
+		WHERE N.ESTBL_EMPNO = E.EMPNO
+	</select>
+	
+	<!-- 커뮤니티 모달조회 -->
+	<select id="comModal" resultType="kr.or.ddit.community.vo.CommuVO">	
+		SELECT ROW_NUMBER() OVER(ORDER BY CMMNTY_NO DESC) RNUM
+		    , N.CMMNTY_NO
+		    , N.ESTBL_EMPNO
+		    , E.NM
+		    , N.SJ
+		    , N.CN
+		    , N.RCRIT_AT
+		    , N.ESTBL_TM
+		    , (SELECT COUNT(*) FROM tb_bbsctt b
+		        WHERE b.CMMNTY_NO = #{cmmntyNo}) board_num
+		    , (SELECT COUNT(*) FROM tb_cmmnty_sbscrber c
+		        WHERE c.CMMNTY_NO = #{cmmntyNo}) join_num
+		FROM TB_CMMNTY N, TB_EMPL E
+		WHERE  N.CMMNTY_NO = #{cmmntyNo}
+		AND N.ESTBL_EMPNO = E.EMPNO
+	</select>
+	
+	<!-- 나의 커뮤니티 -->
+	<select id="comMy" resultType="kr.or.ddit.community.vo.CommuVO" parameterType="int">	
+		SELECT SJ, CMMNTY_NO
+		FROM TB_CMMNTY
+		WHERE ESTBL_EMPNO = #{estblEmpno}
+	</select>
+	
+	<!-- 커뮤니티 가입하기 -->
+	<insert id="comJoin" parameterType="kr.or.ddit.community.vo.ComJoinVO">
+		INSERT INTO TB_CMMNTY_SBSCRBER
+			(CMMNTY_NO
+			, SBSCRBER_EMPNO
+			, APPROVE_EMPNO)
+		VALUES(#{cmmntyNo}
+			, #{sbscrberEmpno}
+			, #{approveEmpno})
+	</insert>
+</mapper>

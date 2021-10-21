@@ -1,0 +1,27 @@
+package kr.or.ddit.bogo.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import lombok.extern.slf4j.Slf4j;
+
+@RequestMapping("/bogo")
+@Slf4j
+@Controller
+public class BogoController {
+	
+	@GetMapping("/home")
+	public String bogoHome() {
+		return "bogo/bogoHome";
+	}
+	
+	@GetMapping("/add")
+	public String bogoAdd() {
+		return "bogo/bogoAdd";
+	}
+	@GetMapping("/insert")
+	public String bogoInsert() {
+		return "bogo/bogoInsert";
+	}
+}

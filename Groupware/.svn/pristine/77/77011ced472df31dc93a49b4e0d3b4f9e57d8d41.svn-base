@@ -1,0 +1,489 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<!DOCTYPE html>
+<html>
+
+<body>
+	<div class="divSimpleCommunity">
+		<span class="title">커뮤니티 최신글</span>
+		<ul class="nav nav-tabs">
+			<li class="nav-item"><a class="nav-link active"
+				data-toggle="tab" href="#info1">기본</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="tab"
+				href="#info2">신상</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="tab"
+				href="#info3">직무/담당</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="tab"
+				href="#info4">발령</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="tab"
+				href="#info5">경력</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="tab"
+				href="#info6">포상/징계</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="tab"
+				href="#info7">인사평가</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="tab"
+				href="#info8">교육</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="tab"
+				href="#info9">자격</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="tab"
+				href="#info10">어학</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="tab"
+				href="#info11">병역</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="tab"
+				href="#info12">해외출장</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="tab"
+				href="#info13">학력</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="tab"
+				href="#info14">가족</a></li>
+		</ul>
+		<div class="tool_bar" style="text-align: right; margin-right: 20px;">
+			<span class="btn_wrap"> <span class="far fa-caret-square-down"
+				id="foldTab" style="display: inline-block;"
+				style="width: 2m; height: 2em"></span>
+			</span>
+		</div>
+		<div class="tab-content">
+			<div class="tab-pane fade show active" id="info1">
+				<h3 class="tab_title">기본 정보</h3>
+				<div class="ehr_basic viewForm">
+					<form id="data_form">
+						<table class="type_list_box" style="width: 100%; height: 200px;">
+							<tbody>
+								<tr>
+									<td class="col1" id="title"><span class="title_txt">입사일</span></td>
+									<td class="col2">2019-06-01</td>
+									<td class="col3" id="title"><span class="title_txt">직무</span></td>
+									<td class="col4"><span class="txt">ㄹㅇㄹ</span></td>
+									<td class="col5" id="title"><span class="title_txt">직종</span></td>
+									<td class="col6"><span class="txt">ㄹㅇㄹㅇ</span></td>
+									<td class="col7" id="title"><span class="title_txt">직군</span></td>
+									<td class="col8"><span class="txt">ㄹㅇㄹㅇ</span></td>
+								</tr>
+								<tr>
+									<td class="col1" id="title"><span class="title_txt">채용구분</span></td>
+									<td class="col2">경력</td>
+									<td class="col3" id="title"><span class="title_txt">직원구분</span></td>
+									<td class="col4"><span class="txt">ㄹㅇㄹㅇㄹ</span></td>
+									<td class="col5" id="title"><span class="title_txt">급여구분</span></td>
+									<td class="col6"><span class="txt">ㄹㅇㄹㅇ</span></td>
+									<td class="col7" id="title"><span class="title_txt">추천자</span></td>
+									<td class="col8"><span class="txt">ㄹㅇㄹㅇ</span></td>
+								</tr>
+								<tr>
+									<td class="col1" id="title"><span class="title_txt">상태</span></td>
+									<td class="col2"><span class="txt"></span></td>
+									<td class="col3" id="title"><span class="title_txt">생년월일</span></td>
+									<td class="col4">2021-05-11&nbsp;</td>
+									<td class="col5" id="title"><span class="title_txt">성별</span></td>
+									<td class="col6">남자</td>
+									<td class="col7" id="title"><span class="title_txt">결혼여부</span></td>
+									<td class="col8">미혼</td>
+								</tr>
+								<tr>
+									<td class="col1" id="title"><span class="title_txt">장애여부</span></td>
+									<td class="col2">N</td>
+									<td class="col3" id="title"><span class="title_txt">보훈여부</span></td>
+									<td class="col4"></td>
+									<td class="col5" id="title"><span class="title_txt">퇴사일</span></td>
+									<td class="col6">2021-07-09</td>
+									<td class="col7" id="title"><span class="title_txt">퇴직사유</span></td>
+									<td class="col8"><span class="txt">ㄹㅇㄹㅇㄹ</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="info2">
+				<h3 class="tab_title">신상 정보</h3>
+				<!--탭 전체 펼치기시 타이틀 나옴-->
+				<form id="data_form">
+					<table class="type_list_box" style="width: 100%; height: 200px;">
+						<tbody>
+							<tr>
+								<td class="col1" id="title"><span class="title_txt">취미</span></td>
+								<td class="col2"><span class="txt"></span></td>
+								<td class="col3" id="title"><span class="title_txt">특기</span></td>
+								<td class="col4"><span class="txt"></span></td>
+								<td class="col5" id="title"><span class="title_txt">팩스</span></td>
+								<td class="col6"><span class="txt"></span></td>
+								<td class="col7" id="title"><span class="title_txt">취업방법</span></td>
+								<td class="col8"><span class="txt"></span></td>
+							</tr>
+							<tr>
+								<td class="col1" id="title"><span class="title_txt">주소</span></td>
+
+								<td colspan="5"><span class="txt"></span></td>
+								<td class="col7" id="title"><span class="title_txt">자택번호</span></td>
+								<td class="col8"><span class="txt"></span></td>
+							</tr>
+							<tr>
+								<td class="col1" id="title"><span class="title_txt">보훈번호</span></td>
+								<td colspan="3"><span class="txt"></span></td>
+								<td class="col5" id="title"><span class="title_txt">보훈가족</span></td>
+								<td class="col6"><span class="txt"></span></td>
+								<td class="col7" id="title"><span class="title_txt">보훈구분</span></td>
+								<td class="col8"><span class="txt"></span></td>
+							</tr>
+							<tr>
+								<td class="col1" id="title"><span class="title_txt">장애등록번호</span></td>
+								<td class="col2"><span class="txt"></span></td>
+								<td class="col3" id="title"><span class="title_txt">장애구분</span></td>
+								<td class="col4"><span class="txt"></span></td>
+								<td class="col5" id="title"><span class="title_txt">장애등급</span></td>
+								<td class="col6"><span class="txt"></span></td>
+								<td class="col7" id="title"><span class="title_txt">장애인정구분</span></td>
+								<td class="col8"><span class="txt"></span></td>
+							</tr>
+							<tr>
+								<td class="col1" id="title"><span class="title_txt">계좌유형</span></td>
+								<td class="col2"><span class="txt"></span></td>
+								<td class="col3" id="title"><span class="title_txt">은행</span></td>
+								<td class="col4"><span class="txt"></span></td>
+								<td class="col5" id="title"><span class="title_txt">예금주</span></td>
+								<td class="col6"><span class="txt"></span></td>
+								<td class="col7" id="title"><span class="title_txt">비고</span></td>
+								<td class="col8"><span class="txt"></span></td>
+							</tr>
+							<tr>
+								<td class="col1" id="title"><span class="title_txt">계좌번호</span></td>
+								<td colspan="3"><span class="txt"></span></td>
+								<td class="col5" id="title"><span class="title_txt">시작일자</span></td>
+								<td class="col6"></td>
+								<td class="col7" id="title"><span class="title_txt">종료일자</span></td>
+								<td class="col6"></td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
+			</div>
+			<div class="tab-pane fade" id="info3">
+			<h3 class="tab_title">직무/담당</h3>
+			<table class="type_list_box">
+				<tbody>
+					<tr id="title">
+						<td class="num"><span class="title_txt">No</span></td>
+						<td class="group"><span class="title_txt">직군</span></td>
+						<td class="category"><span class="title_txt">직종</span></td>
+						<td class="jop"><span class="title_txt">직무</span></td>
+						<td class="date"><span class="title_txt">시작일</span></td>
+						<td class="date"><span class="title_txt">종료일</span></td>
+						<td class="percent"><span class="title_txt">비중</span></td>
+						<td class="work"><span class="title_txt">담당업무</span></td>
+					</tr>
+					<tr class="dataRow" data-id="">
+						<td class="num"><span>1</span></td>
+						<td class="group"><span class="txt"></span></td>
+						<td class="category"><span class="txt"></span></td>
+						<td class="jop"><span class="txt"></span></td>
+						<td class="date"></td>
+						<td class="date"></td>
+						<td class="percent"><span class="txt"></span></td>
+						<td class="work"><span class="txt"></span></td>
+					</tr>
+				</tbody>
+			</table>
+			</div>
+			<div class="tab-pane fade" id="info4">
+				<h3 class="tab_title">발령</h3>
+				<table class="type_list_box">
+					<tbody>
+						<tr id="title">
+							<td class="num"><span class="title_txt">No</span></td>
+							<td class="date"><span class="title_txt">발령일</span></td>
+							<td class="division"><span class="title_txt">구분</span></td>
+							<td class="reason"><span class="title_txt">발령명</span></td>
+							<td class="state"><span class="title_txt">직원구분</span></td>
+							<td class="team"><span class="title_txt">소속</span></td>
+							<td class="level"><span class="title_txt">급여단계</span></td>
+							<td class="jop"><span class="title_txt">직책</span></td>
+							<td class="work"><span class="title_txt">담당업무</span></td>
+						</tr>
+						<tr class="dataRow" data-id="">
+							<td class="num"><span>1</span></td>
+							<td class="date"><span class="txt"></span></td>
+							<td class="division"><span class="txt"></span></td>
+							<td class="reason"><span class="txt"></span></td>
+							<td class="state"><span class="txt"></span></td>
+							<td class="team"><span class="txt"></span></td>
+							<td class="level"><span class="txt"></span></td>
+							<td class="jop"><span class="txt"></span></td>
+							<td class="work"><span class="txt"></span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="tab-pane fade" id="info5">
+				<h3 class="tab_title">경력</h3>
+				<table class="type_list_box">
+					<tbody>
+						<tr id="title">
+							<td class="num"><span class="title_txt">No</span></td>
+							<td class="date"><span class="title_txt">시작일</span></td>
+							<td class="date"><span class="title_txt">종료일</span></td>
+							<td class="workplace"><span class="title_txt">근무처</span></td>
+							<td class="position"><span class="title_txt">직위</span></td>
+							<td class="jop"><span class="title_txt">담당업무</span></td>
+							<td class="period"><span class="title_txt">근속기간</span></td>
+							<td class="cause"><span class="title_txt">퇴직사유</span></td>
+						</tr>
+						<tr class="dataRow">
+							<td class="num"><span>1</span></td>
+							<td class="date"></td>
+							<td class="date"></td>
+							<td class="workplace"><span class="txt"></span></td>
+							<td class="position"><span class="txt"></span></td>
+							<td class="jop"><span class="txt"></span></td>
+							<td class="period"><span class="txt"></span></td>
+							<td class="cause"><span class="txt"></span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="tab-pane fade" id="info6">
+				<h3 class="tab_title">포상/징계</h3>
+				<table class="type_list_box">
+					<tbody>
+						<tr id="title">
+							<td class="num"><span class="title_txt">No</span></td>
+							<td class="division"><span class="title_txt">구분</span></td>
+							<td class="date"><span class="title_txt">일자</span></td>
+							<td class="reason"><span class="title_txt">내용</span></td>
+							<td class="cause"><span class="title_txt">사유</span></td>
+							<td class="etc"><span class="title_txt">기타</span></td>
+						</tr>
+						<tr class="dataRow" data-id="">
+							<td class="num"><span>1</span></td>
+							<td class="division"><span class="txt"></span></td>
+							<td class="date"></td>
+							<td class="reason"><span class="txt"></span></td>
+							<td class="cause"><span class="txt"></span></td>
+							<td class="etc"><span class="txt"></span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="tab-pane fade" id="info7">
+				<h3 class="tab_title">인사평가</h3>
+				<!--탭 전체 펼치기시 타이틀 나옴-->
+				<table class="type_list_box">
+					<tbody>
+						<tr id="title">
+							<td class="num"><span class="title_txt">No</span></td>
+							<td class="year"><span class="title_txt">평가년도</span></td>
+							<td class="capability"><span class="title_txt">역량</span></td>
+							<td class="result"><span class="title_txt">성과</span></td>
+							<td class="evaluator"><span class="title_txt">평가자</span></td>
+							<td class="team"><span class="title_txt">조직</span></td>
+							<td class="etc"><span class="title_txt">기타</span></td>
+						</tr>
+						<tr class="dataRow" data-id="1">
+							<td class="num"><span>1</span></td>
+							<td class="year"><span class="txt"></span></td>
+							<td class="capability"><span class="txt"></span></td>
+							<td class="result"><span class="txt"></span></td>
+							<td class="evaluator"><span class="txt"></span></td>
+							<td class="team"><span class="txt"></span></td>
+							<td class="etc"><span class="txt"></span></td>
+						</tr>
+						<tr class="dataRow" data-id="2">
+							<td class="num"><span>2</span></td>
+							<td class="year"><span class="txt"></span></td>
+							<td class="capability"><span class="txt"></span></td>
+							<td class="result"><span class="txt"></span></td>
+							<td class="evaluator"><span class="txt"></span></td>
+							<td class="team"><span class="txt"></span></td>
+							<td class="etc"><span class="txt"></span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="tab-pane fade" id="info8">
+				<h3 class="tab_title">교육</h3>
+				<table class="type_list_box">
+					<tbody>
+						<tr id="title">
+							<td class="num"><span class="title_txt">No</span></td>
+							<td class="class"><span class="title_txt">교육과정</span></td>
+							<td class="division"><span class="title_txt">교육유형</span></td>
+							<td class="date"><span class="title_txt">시작일</span></td>
+							<td class="date"><span class="title_txt">종료일</span></td>
+							<td class="academy"><span class="title_txt">교육기관</span></td>
+						</tr>
+						<tr class="dataRow">
+							<td class="num"><span>1</span></td>
+							<td class="class"><span class="txt"></span></td>
+							<td class="division"><span class="txt"></span></td>
+							<td class="date"><span class="txt"></span> <!--  --></td>
+							<td class="date"><span class="txt"></span> <!--  --></td>
+							<td class="academy"><span class="txt"></span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="tab-pane fade" id="info9">
+				<h3 class="tab_title">자격</h3>
+				<table class="type_list_box">
+					<tbody>
+						<tr id="title">
+							<td class="num"><span class="title_txt">No</span></td>
+							<td class="division"><span class="title_txt">구분</span></td>
+							<td class="name"><span class="title_txt">자격명</span></td>
+							<td class="number"><span class="title_txt">자격번호</span></td>
+							<td class="level"><span class="title_txt">자격등급</span></td>
+							<td class="academy"><span class="title_txt">기관명</span></td>
+							<td class="date"><span class="title_txt">취득일</span></td>
+							<td class="date"><span class="title_txt">정지일</span></td>
+						</tr>
+						<tr class="dataRow">
+							<td class="num"><span>1</span></td>
+							<td class="division"><span class="txt"></span></td>
+							<td class="name"><span class="txt"></span></td>
+							<td class="number"><span class="txt"></span></td>
+							<td class="level"><span class="txt"></span></td>
+							<td class="academy"><span class="txt"></span></td>
+							<td class="date"><span class="txt"></span> <!--  --></td>
+							<td class="date"><span class="txt"></span> <!--  --></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="tab-pane fade" id="info10">
+				<h3 class="tab_title" style="">어학</h3>
+				<table class="type_list_box">
+					<tbody>
+						<tr id="title">
+							<td class="num"><span class="title_txt">No</span></td>
+							<td class="division"><span class="title_txt">구분</span></td>
+							<td class="name"><span class="title_txt">어학명</span></td>
+							<td class="date"><span class="title_txt">평가일</span></td>
+							<td class="academy"><span class="title_txt">평가기관</span></td>
+							<td class="score"><span class="title_txt">점수</span></td>
+							<td class="level"><span class="title_txt">등급</span></td>
+							<td class="etc"><span class="title_txt">기타</span></td>
+						</tr>
+						<tr class="dataRow">
+							<td class="num"><span>1</span></td>
+							<td class="division"><span class="txt"></span></td>
+							<td class="name"><span class="txt"></span></td>
+							<td class="date"><span class="txt"></span> <!--  --></td>
+							<td class="academy"><span class="txt"></span></td>
+							<td class="score"><span class="txt"></span></td>
+							<td class="level"><span class="txt"></span></td>
+							<td class="etc"><span class="txt"></span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="tab-pane fade" id="info11">
+				<h3 class="tab_title">병역</h3>
+				<table class="type_list_box">
+					<tbody>
+						<tr id="title">
+							<td class="num"><span class="title_txt">No</span></td>
+							<td class="class"><span class="title_txt">군벌</span></td>
+							<td class="level"><span class="title_txt">계급</span></td>
+							<td class="number"><span class="title_txt">군번</span></td>
+							<td class="division"><span class="title_txt">전역구분</span></td>
+							<td class="date"><span class="title_txt">입대일</span></td>
+							<td class="date"><span class="title_txt">제대일</span></td>
+							<td class="etc"><span class="title_txt">기타 사유</span></td>
+						</tr>
+						<tr class="dataRow" data-id="">
+							<td class="num"><span>1</span></td>
+							<td class="class"><span class="txt"></span></td>
+							<td class="level"><span class="txt"></span></td>
+							<td class="number"><span class="txt"></span></td>
+							<td class="division"><span class="txt"></span></td>
+							<td class="date"><span class="txt"></span> <!--  --></td>
+							<td class="date"><span class="txt"></span> <!--  --></td>
+							<td class="etc"><span class="txt"></span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="tab-pane fade" id="info12">
+				<h3 class="tab_title">해외출장</h3>
+				<table class="type_list_box">
+					<tbody>
+						<tr id="title">
+							<td class="num"><span class="title_txt">No</span></td>
+							<td class="period"><span class="title_txt">기간</span></td>
+							<td class="country"><span class="title_txt">출장국가</span></td>
+							<td class="area"><span class="title_txt">출장지</span></td>
+							<td class="purpose"><span class="title_txt">출장목적</span></td>
+						</tr>
+						<tr class="dataRow" data-id="">
+							<td class="num"><span>1</span></td>
+							<td class="period">
+								<div class="date_wrap">
+									<span class="txt"></span> <span class="date_wave">~</span>
+									<span class="txt"></span>
+								</div>
+							</td>
+							<td class="country"><span class="txt"></span></td>
+							<td class="area"><span class="txt"></span></td>
+							<td class="purpose"><span class="txt"></span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="tab-pane fade" id="info13">
+				<h3 class="tab_title">학력</h3>
+				<table class="type_list_box">
+					<tbody>
+						<tr id="title">
+							<td class="num"><span class="title_txt">No</span></td>
+							<td class="class"><span class="title_txt">구분</span></td>
+							<td class="school"><span class="title_txt">학교명</span></td>
+							<td class="date"><span class="title_txt">입학년도</span></td>
+							<td class="date"><span class="title_txt">졸업년도</span></td>
+							<td class="department"><span class="title_txt">전공</span></td>
+							<td class="minor"><span class="title_txt">부전공</span></td>
+							<td class="etc"><span class="title_txt">기타</span></td>
+						</tr>
+						<tr class="dataRow" data-id="">
+							<td class="num"><span>1</span></td>
+							<td class="class"><span class="txt"></span></td>
+							<td class="school"><span class="txt"></span></td>
+							<td class="date"></td>
+							<td class="date"></td>
+							<td class="department"><span class="txt"></span></td>
+							<td class="minor"><span class="txt"></span></td>
+							<td class="etc"><span class="txt"></span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="tab-pane fade" id="info14">
+				<h3 class="tab_title">가족</h3>
+				<table class="type_list_box">
+					<tbody>
+						<tr id="title">
+							<td class="num"><span class="title_txt">No</span></td>
+							<td class="name"><span class="title_txt"> 가족성명</span></td>
+							<td class="relation"><span class="title_txt"> 가족관계</span></td>
+							<td class="sex"><span class="title_txt">성별</span></td>
+							<td class="date"><span class="title_txt">생년월일</span></td>
+							<td class="division"><span class="title_txt">학력</span></td>
+							<td class="jop"><span class="title_txt">직업</span></td>
+							<td class="etc"><span class="title_txt">기타</span></td>
+						</tr>
+						<tr class="dataRow" data-id="">
+							<td class="num"><span>1</span></td>
+							<td class="name"><span class="txt"></span></td>
+							<td class="relation"><span class="txt"></span></td>
+							<td class="sex"></td>
+							<td class="date"></td>
+							<td class="division"><span class="txt"></span></td>
+							<td class="jop"><span class="txt"></span></td>
+							<td class="etc"><span class="txt"></span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<body id="body">
+		<div class="modal-dialog">
+			<div class="modal-content">
+			<form>
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<input type="search" class="form-control">
+					<button type="button" class="close">&times;</button>
+				</div>
+	
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div style="text-align: center; padding: 10px;">
+						<ul style="list-style: none; padding: 0px; margin: 0px;">
+							<li style="padding-right: 100px;">
+								<a href="#"><i class="fas fa-building mr-2"></i>MS그룹</a>
+							</li>
+						</ul>
+						<ul style="list-style-type: none; margin: 0px; padding: 0px;">
+							<li><span>├</span><a><i class="fas fa-user-tie mr-2 ml-2"></i>이영우 대표이사</a></li>
+						</ul>
+					</div>
+				</div>
+			</form>
+			</div>
+		</div>
+</body>

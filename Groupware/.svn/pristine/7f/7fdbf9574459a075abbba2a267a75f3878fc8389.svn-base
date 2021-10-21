@@ -1,0 +1,41 @@
+package kr.or.ddit.mail.controller;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import kr.or.ddit.bogo.controller.BogoController;
+import kr.or.ddit.bogo.service.BogoService;
+import kr.or.ddit.common.controller.CommonController;
+import kr.or.ddit.mail.service.MailService;
+import lombok.extern.slf4j.Slf4j;
+
+@RequestMapping(value="/mail/*")
+@Slf4j
+@Controller
+public class MailController {
+	private static Logger logger = LoggerFactory.getLogger(MailController.class);
+	
+	
+	
+	/*
+	 * @Autowired MailService mailService;
+	 */
+	
+
+	@GetMapping("/home")
+	public String indexLTE() {
+		return "mail/home";
+	}
+	@GetMapping("/mailSend")
+	public String mailSend() {
+		return "mail/mailSend";
+	}
+	@GetMapping("/mailDetail")
+	public String mailDetail() {
+		return "mail/mailDetail";
+	}
+}

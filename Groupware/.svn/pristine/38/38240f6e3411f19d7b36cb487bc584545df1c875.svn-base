@@ -1,0 +1,40 @@
+package kr.or.ddit.community.mapper;
+
+import java.util.List;
+
+import kr.or.ddit.community.vo.ComBoardVO;
+import kr.or.ddit.community.vo.ComJoinVO;
+import kr.or.ddit.community.vo.CommuVO;
+
+public interface CommuMapper {
+	// 커뮤니티 작성
+	public int comInsert(CommuVO commuVo);
+	// 공지사항 만들기
+	public int comNoticeB(int cmmntyNo);
+	// 활동게시판 만들기
+	public int comActiveB(int cmmntyNo);
+	// 커뮤니티  목록
+	public List<CommuVO> comList();
+	// 커뮤니티 모달 조회
+	public CommuVO comModal(int cmmntyNo);
+	// 나의 커뮤니티 조회
+	public List<CommuVO> comMy(int estblEmpno);
+	// 커뮤니티 가입
+	public int comJoin (ComJoinVO comJoinVo);
+	// 가입자 - 가입한 커뮤니티(가입대기)
+	public List<ComJoinVO> comStand (int sbscrberEmpno);
+	// 가입자 - 가입한 커뮤니티(가입승인)
+	public List<ComJoinVO> comAccept (int sbscrberEmpno);
+	// 개설자 - 가입한 회원 리스트 (승인 / 취소)
+	public List<ComJoinVO> comAllMem (int sbscrberEmpno);
+	// 개설자 - 가입한 회원 변경
+	public int comAtUpdate (ComJoinVO comJoinVo);
+	// 개설자 - 가입한 회원 취소
+	public int comAtCancel (ComJoinVO comJoinVo);
+	// 해당 커뮤니티 상세 정보
+	public CommuVO comDetail(int cmmntyNo);
+	// 해당 커뮤니티 상세 정보
+	public List<ComJoinVO> comMemList(int cmmntyNo);
+	// 해당 커뮤니티 상세 정보
+	public List<ComBoardVO> comBoard(int cmmntyNo);
+}

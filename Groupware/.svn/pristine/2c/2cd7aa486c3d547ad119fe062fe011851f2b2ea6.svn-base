@@ -1,0 +1,406 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.survey.mapper.SurveyMapper">
+
+	<!-- 설문 작성 -->
+	<insert id="createQustnr" parameterType="surveyVO">
+	<selectKey order="BEFORE" keyProperty="qustnrNo" resultType="int">
+		SELECT NVL(MAX(QUSTNR_NO),0)+1 AS qustnrNo FROM TB_QUSTNR
+	</selectKey>
+		INSERT
+			INTO
+			TB_QUSTNR
+		(QUSTNR_NO
+			, WRTER_EMPNO
+			, QUSTNR_SJ
+			, BEGIN_DE
+			, END_DE
+			, ANSWER_AT
+			, AFTER_UPDT_AT
+			, OTHBC_AT
+			, GUIDANCE_SNTENC
+			, CODE
+			, WRITING_DE
+			, UPDT_DE
+			, FILE_NO)
+		VALUES(#{qustnrNo}
+		, #{wrterEmpno}
+		, #{qustnrSj}
+		, #{beginDe}
+		, #{endDe}
+		, #{answerAt}
+		, #{afterUpdtAt}
+		, #{othbcAt}
+		, #{guidanceSntenc}
+		, 'QU01'
+		, SYSDATE
+		, ''
+		,#{fileNo})
+	</insert>
+	
+	<!-- 설문 임시저장 -->
+	<insert id="saveQustnr" parameterType="surveyVO">
+	<selectKey order="BEFORE" keyProperty="qustnrNo" resultType="int">
+		SELECT NVL(MAX(QUSTNR_NO),0)+1 AS qustnrNo FROM TB_QUSTNR
+	</selectKey>
+		INSERT
+			INTO
+			TB_QUSTNR
+		(QUSTNR_NO
+			, WRTER_EMPNO
+			, QUSTNR_SJ
+			, BEGIN_DE
+			, END_DE
+			, ANSWER_AT
+			, AFTER_UPDT_AT
+			, OTHBC_AT
+			, GUIDANCE_SNTENC
+			, CODE
+			, WRITING_DE
+			, UPDT_DE
+			, FILE_NO)
+		VALUES(#{qustnrNo}
+		, #{wrterEmpno}
+		, #{qustnrSj}
+		, #{beginDe}
+		, #{endDe}
+		, #{answerAt}
+		, #{afterUpdtAt}
+		, #{othbcAt}
+		, #{guidanceSntenc}
+		, 'QU04'
+		, SYSDATE
+		, ''
+		,#{fileNo})
+	</insert>
+	
+	<!-- 설문 대상자 등록 -->
+	<insert id="createTrgterEmpno" parameterType="surveyVO">
+		INSERT
+			INTO
+			TB_QUSTNR_TRGTER
+		(QUSTNR_NO
+			, TRGTER_EMPNO)
+		VALUES(#{qustnrNo}
+		, #{trgterEmpno})
+	</insert>
+	
+	<!-- 문항 번호만 생성하여 문항 등록 -->
+	<insert id="createQesitmNo" parameterType="surveyVO">
+	<selectKey order="BEFORE" keyProperty="qesitmNo" resultType="int">
+		SELECT NVL(MAX(QESITM_NO),0)+1 AS qesitmNo 
+		FROM TB_QUSTNR_QESITM
+		WHERE QUSTNR_NO = #{qustnrNo}
+	</selectKey>
+		INSERT
+			INTO
+			TB_QUSTNR_QESITM
+		(QUSTNR_NO
+			, QESITM_NO)
+		VALUES(#{qustnrNo}
+		, #{qesitmNo})
+	</insert>
+	
+	<!-- 문항 제목, 문항 타입 정보 추가 -->
+	<update id="addQesitmInfo" parameterType="surveyVO">
+		UPDATE
+			TB_QUSTNR_QESITM
+		SET
+			CODE = #{code}
+			, CN = #{cn}
+		WHERE
+			QUSTNR_NO = #{qustnrNo}
+			AND QESITM_NO = #{qesitmNo}
+	</update>
+	
+	<!-- 보기 번호 등록 -->
+	<insert id="createExNo" parameterType="surveyVO">
+	<selectKey order="BEFORE" keyProperty="exNo" resultType="int">
+		SELECT NVL(MAX(EX_NO),0)+1 AS exNo 
+		FROM TB_QESITM_EX
+		WHERE QUSTNR_NO = #{qustnrNo}
+		AND QESITM_NO = #{qesitmNo}
+	</selectKey>
+		INSERT
+			INTO
+			TB_QESITM_EX
+		(QUSTNR_NO
+			, QESITM_NO
+			, EX_NO)
+		VALUES(#{qustnrNo}
+		, #{qesitmNo}
+		, #{exNo})
+	</insert>
+	
+	<!-- 보기 내용, 보기 점수 추가-->
+	<update id="addExInfo" parameterType="surveyVO">
+		UPDATE
+			TB_QESITM_EX
+		SET
+			EX_SCORE = #{exScore}
+			, EX_CN = #{exCn}
+		WHERE
+			QUSTNR_NO = #{qustnrNo}
+			AND QESITM_NO = #{qesitmNo}
+			AND EX_NO = #{exNo}
+	</update>
+	
+	<!-- 미참여한 모든 설문을 최신순으로 조회(4개) -->
+	<select id="AllsurveyListRspnsN" parameterType="string" resultType="surveyVO">
+	 <![CDATA[
+		SELECT ROWNUM RNUM, Z.*
+		FROM
+			(
+			SELECT
+				E.*
+			FROM
+				(
+				SELECT
+					A.QUSTNR_NO
+					, A.WRTER_EMPNO
+					, A.QUSTNR_SJ
+					, TO_CHAR(A.BEGIN_DE, 'YYYY-MM-dd') AS beginDe
+					, TO_CHAR(A.END_DE, 'YYYY-MM-dd') AS endDe
+					, A.OTHBC_AT
+					, A.GUIDANCE_SNTENC
+					, A.WRITING_DE
+					, A.UPDT_DE
+					, A.CODE
+					, B.TRGTER_EMPNO 
+					, NVL(C.RSPNS_AT, 'N') AS RSPNS_AT
+					, D.WRTERNM
+					, D.OFCPSNM
+				FROM
+					TB_QUSTNR A
+					, TB_QUSTNR_TRGTER B
+					, 
+					(
+						SELECT
+							QUSTNR_NO
+							, RSPNS_EMPNO
+							, MAX(RSPNS_AT) AS RSPNS_AT
+						FROM
+							TB_QESITM_RSPNS
+						GROUP BY
+							QUSTNR_NO
+							, RSPNS_EMPNO
+					) C
+					, 
+					(
+						SELECT A.EMPNO, A.NM AS WRTERNM, B.NM AS OFCPSNM 
+						FROM TB_EMPL A, TB_UNITY_CODE B
+						WHERE A.OFCPS_CODE = B.CODE
+					) D
+				WHERE
+					A.QUSTNR_NO = B.QUSTNR_NO
+					AND A.WRTER_EMPNO = D.EMPNO
+					AND B.QUSTNR_NO = C.QUSTNR_NO(+)
+					AND B.TRGTER_EMPNO = C.RSPNS_EMPNO(+)
+				) E
+		WHERE
+			E.TRGTER_EMPNO = #{empno}
+			AND E.RSPNS_AT = 'N'
+			AND E.CODE = 'QU01'
+		ORDER BY E.QUSTNR_NO DESC) Z
+		WHERE ROWNUM <= 4
+	]]>
+	</select>
+	
+	<!-- 작성된 설문을 최신순으로 조회(15개) -->
+	<select id="surveyLatelyList" parameterType="string" resultType="surveyVO">
+	 <![CDATA[
+		SELECT ROWNUM RNUM, Z.*
+		FROM
+			(
+			SELECT
+				E.*
+			FROM
+				(
+				SELECT
+					A.QUSTNR_NO
+					, A.WRTER_EMPNO
+					, A.QUSTNR_SJ
+					, TO_CHAR(A.BEGIN_DE, 'YYYY-MM-dd') AS beginDe
+					, TO_CHAR(A.END_DE, 'YYYY-MM-dd') AS endDe
+					, A.OTHBC_AT
+					, A.GUIDANCE_SNTENC
+					, A.WRITING_DE
+					, A.UPDT_DE
+					, A.CODE
+					, B.TRGTER_EMPNO 
+					, NVL(C.RSPNS_AT, 'N') AS RSPNS_AT
+					, D.WRTERNM
+					, D.OFCPSNM
+				FROM
+					TB_QUSTNR A
+					, TB_QUSTNR_TRGTER B
+					, 
+					(
+						SELECT
+							QUSTNR_NO
+							, RSPNS_EMPNO
+							, MAX(RSPNS_AT) AS RSPNS_AT
+						FROM
+							TB_QESITM_RSPNS
+						GROUP BY
+							QUSTNR_NO
+							, RSPNS_EMPNO
+					) C
+					, 
+					(
+						SELECT A.EMPNO, A.NM AS WRTERNM, B.NM AS OFCPSNM 
+						FROM TB_EMPL A, TB_UNITY_CODE B
+						WHERE A.OFCPS_CODE = B.CODE
+					) D
+				WHERE
+					A.QUSTNR_NO = B.QUSTNR_NO
+					AND A.WRTER_EMPNO = D.EMPNO
+					AND B.QUSTNR_NO = C.QUSTNR_NO(+)
+					AND B.TRGTER_EMPNO = C.RSPNS_EMPNO(+)
+				) E
+		WHERE
+			E.TRGTER_EMPNO = #{empno}
+		AND E.CODE != 'QU04'
+		ORDER BY E.QUSTNR_NO DESC) Z
+		WHERE ROWNUM <= 15
+	]]>
+	</select>
+	
+	<!-- 진행 중인 설문 조회 -->
+	<select id="runSurveyList" parameterType="string" resultType="surveyVO">
+		SELECT ROWNUM RNUM, Z.*
+		FROM
+			(
+			SELECT
+				E.*
+			FROM
+				(
+				SELECT
+					A.QUSTNR_NO
+					, A.WRTER_EMPNO
+					, A.QUSTNR_SJ
+					, TO_CHAR(A.BEGIN_DE, 'YYYY-MM-dd') AS beginDe
+					, TO_CHAR(A.END_DE, 'YYYY-MM-dd') AS endDe
+					, A.OTHBC_AT
+					, A.GUIDANCE_SNTENC
+					, A.WRITING_DE
+					, A.UPDT_DE
+					, A.CODE
+					, B.TRGTER_EMPNO 
+					, NVL(C.RSPNS_AT, 'N') AS RSPNS_AT
+					, D.WRTERNM
+					, D.OFCPSNM
+				FROM
+					TB_QUSTNR A
+					, TB_QUSTNR_TRGTER B
+					, 
+					(
+						SELECT
+							QUSTNR_NO
+							, RSPNS_EMPNO
+							, MAX(RSPNS_AT) AS RSPNS_AT
+						FROM
+							TB_QESITM_RSPNS
+						GROUP BY
+							QUSTNR_NO
+							, RSPNS_EMPNO
+					) C
+					, 
+					(
+						SELECT A.EMPNO, A.NM AS WRTERNM, B.NM AS OFCPSNM 
+						FROM TB_EMPL A, TB_UNITY_CODE B
+						WHERE A.OFCPS_CODE = B.CODE
+					) D
+				WHERE
+					A.QUSTNR_NO = B.QUSTNR_NO
+					AND A.WRTER_EMPNO = D.EMPNO
+					AND B.QUSTNR_NO = C.QUSTNR_NO(+)
+					AND B.TRGTER_EMPNO = C.RSPNS_EMPNO(+)
+				) E
+		WHERE
+			E.TRGTER_EMPNO = #{empno}
+			AND E.CODE = 'QU01'
+		ORDER BY E.QUSTNR_NO DESC) Z
+	</select>
+	
+	<!-- 마감된 설문 조회 -->
+	<select id="doneSurveyList" parameterType="String" resultType="surveyVO">
+		SELECT ROWNUM RNUM, Z.*
+		FROM
+			(
+			SELECT
+				E.*
+			FROM
+				(
+				SELECT
+					A.QUSTNR_NO
+					, A.WRTER_EMPNO
+					, A.QUSTNR_SJ
+					, TO_CHAR(A.BEGIN_DE, 'YYYY-MM-dd') AS beginDe
+					, TO_CHAR(A.END_DE, 'YYYY-MM-dd') AS endDe
+					, A.OTHBC_AT
+					, A.GUIDANCE_SNTENC
+					, A.WRITING_DE
+					, A.UPDT_DE
+					, A.CODE
+					, B.TRGTER_EMPNO 
+					, NVL(C.RSPNS_AT, 'N') AS RSPNS_AT
+					, D.WRTERNM
+					, D.OFCPSNM
+				FROM
+					TB_QUSTNR A
+					, TB_QUSTNR_TRGTER B
+					, 
+					(
+						SELECT
+							QUSTNR_NO
+							, RSPNS_EMPNO
+							, MAX(RSPNS_AT) AS RSPNS_AT
+						FROM
+							TB_QESITM_RSPNS
+						GROUP BY
+							QUSTNR_NO
+							, RSPNS_EMPNO
+					) C
+					, 
+					(
+						SELECT A.EMPNO, A.NM AS WRTERNM, B.NM AS OFCPSNM 
+						FROM TB_EMPL A, TB_UNITY_CODE B
+						WHERE A.OFCPS_CODE = B.CODE
+					) D
+				WHERE
+					A.QUSTNR_NO = B.QUSTNR_NO
+					AND A.WRTER_EMPNO = D.EMPNO
+					AND B.QUSTNR_NO = C.QUSTNR_NO(+)
+					AND B.TRGTER_EMPNO = C.RSPNS_EMPNO(+)
+				) E
+		WHERE
+			E.TRGTER_EMPNO = #{empno}
+			AND E.CODE = 'QU02'
+		ORDER BY E.QUSTNR_NO DESC) Z
+	</select>
+	
+	<!-- 내가 만든 설문 -->
+	<select id="mineSurveyList" parameterType="String" resultType="surveyVO">
+		SELECT
+			A.QUSTNR_NO AS qustnrNo
+			, A.WRTER_EMPNO AS wrterEmpno
+			, A.QUSTNR_SJ AS qustnrSj
+			, TO_CHAR(A.BEGIN_DE, 'YYYY-MM-dd') AS beginDe
+			, TO_CHAR(A.END_DE, 'YYYY-MM-dd') AS endDe
+			, A.ANSWER_AT AS answerAt
+			, A.AFTER_UPDT_AT AS afterUpdtAt
+			, A.OTHBC_AT AS othbcAt
+			, A.GUIDANCE_SNTENC AS guidanceSntenc
+			, A.CODE
+			, A.WRITING_DE AS writingDe
+			, A.UPDT_DE AS updtDe
+			, A.FILE_NO AS fileNo
+			, B.NM AS qustnrStatus
+			, B.NM2 AS qustnrColor
+		FROM
+			TB_QUSTNR A, TB_UNITY_CODE B
+		WHERE A.CODE = B.CODE 
+		AND A.WRTER_EMPNO = #{empno}
+	</select>
+	
+</mapper>

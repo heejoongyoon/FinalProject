@@ -1,0 +1,306 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.community.mapper.CommuMapper">
+	<!-- 커뮤니티 만들기 -->
+	<insert id="comInsert" parameterType="kr.or.ddit.community.vo.CommuVO">
+		<selectKey keyProperty="cmmntyNo" order="BEFORE" resultType="int" >
+			SELECT NVL(MAX(CMMNTY_NO), 0) + 1 FROM TB_CMMNTY
+		</selectKey>
+		INSERT INTO TB_CMMNTY (CMMNTY_NO, ESTBL_EMPNO, SJ, CN, RCRIT_AT)
+		VALUES
+		(
+		    #{cmmntyNo}
+		    ,#{estblEmpno}
+		    ,#{sj}
+		    ,#{cn}
+		    ,#{rcritAt}
+		)
+	</insert>
+	
+	<!-- 해당 커뮤니티 공지게시판 만들기 -->
+	<insert id="comNoticeB" parameterType="int">
+		INSERT INTO TB_CMMNTY_BBS (BBS_NO, CMMNTY_NO, BBS_NM, BBS_TY)
+		VALUES(
+				1
+				,#{cmmntyNo}
+				,'공지사항'
+				,'T'
+		)
+	</insert>
+	
+	<!-- 해당 커뮤니티 활동게시판 만들기 -->
+	<insert id="comActiveB" parameterType="int">
+		INSERT INTO TB_CMMNTY_BBS (BBS_NO, CMMNTY_NO, BBS_NM, BBS_TY)
+		VALUES(
+				2
+				,#{cmmntyNo}
+				,'활동게시판'
+				,'I'
+		)
+	</insert>
+	
+	<!-- 커뮤니티 목록 -->
+	<select id="comList" resultType="kr.or.ddit.community.vo.CommuVO">	
+		SELECT ROW_NUMBER() OVER(ORDER BY CMMNTY_NO DESC) RNUM
+			, N.CMMNTY_NO
+			, N.ESTBL_EMPNO
+			, E.NM
+			, N.SJ
+			, N.CN
+			, N.RCRIT_AT
+			, N.ESTBL_TM
+		FROM TB_CMMNTY N, TB_EMPL E
+		WHERE N.ESTBL_EMPNO = E.EMPNO
+	</select>
+	
+	<!-- 커뮤니티 모달조회 -->
+	<select id="comModal" resultType="kr.or.ddit.community.vo.CommuVO">	
+		SELECT ROW_NUMBER() OVER(ORDER BY CMMNTY_NO DESC) RNUM
+		    , N.CMMNTY_NO
+		    , N.ESTBL_EMPNO
+		    , E.NM
+		    , N.SJ
+		    , N.CN
+		    , N.RCRIT_AT
+		    , N.ESTBL_TM
+		    , (SELECT COUNT(*) FROM tb_bbsctt b
+		        WHERE b.CMMNTY_NO = #{cmmntyNo}) board_num
+		    , (SELECT COUNT(*) FROM tb_cmmnty_sbscrber c
+		        WHERE c.CMMNTY_NO = #{cmmntyNo}) join_num
+		FROM TB_CMMNTY N, TB_EMPL E
+		WHERE  N.CMMNTY_NO = #{cmmntyNo}
+		AND N.ESTBL_EMPNO = E.EMPNO
+	</select>
+	
+	<!-- 나의 커뮤니티 -->
+	<select id="comMy" resultType="kr.or.ddit.community.vo.CommuVO" parameterType="int">	
+		SELECT SJ, CMMNTY_NO
+		FROM TB_CMMNTY
+		WHERE ESTBL_EMPNO = #{estblEmpno}
+	</select>
+	
+	<!-- 커뮤니티 가입하기 -->
+	<insert id="comJoin" parameterType="kr.or.ddit.community.vo.ComJoinVO">
+		INSERT INTO TB_CMMNTY_SBSCRBER
+			(CMMNTY_NO
+			, SBSCRBER_EMPNO
+			, APPROVE_EMPNO)
+		VALUES(#{cmmntyNo}
+			, #{sbscrberEmpno}
+			, #{approveEmpno})
+	</insert>
+	
+	<!-- 가입한 커뮤니티(가입대기) -->
+	<select id="comStand" resultType="kr.or.ddit.community.vo.ComJoinVO" parameterType="int">
+		SELECT
+			N.CMMNTY_NO 
+			, N.SBSCRBER_EMPNO
+			, N.APPROVE_EMPNO
+			, N.APPROVE_TM
+			, N.APPROVE_AT
+			, C.SJ
+			, E.NM
+		FROM
+			TB_CMMNTY_SBSCRBER N, TB_CMMNTY C, TB_EMPL E
+		WHERE SBSCRBER_EMPNO = #{sbscrberEmpno}
+		AND APPROVE_AT = 'N'
+		AND N.CMMNTY_NO = C.CMMNTY_NO
+		AND N.APPROVE_EMPNO = E.EMPNO
+		ORDER BY APPROVE_TM
+	</select>
+		
+	<!-- 가입한 커뮤니티(가입승인) -->
+	<select id="comAccept" resultType="kr.or.ddit.community.vo.ComJoinVO" parameterType="int">
+		SELECT
+			N.CMMNTY_NO 
+			, N.SBSCRBER_EMPNO
+			, N.APPROVE_EMPNO
+			, N.APPROVE_TM
+			, N.APPROVE_AT
+			, C.SJ
+			, C.CN
+			, E.NM
+			, C.RCRIT_AT
+			, C.ESTBL_TM
+			, (SELECT COUNT(*) FROM tb_bbsctt b
+		        WHERE b.CMMNTY_NO = N.CMMNTY_NO) board_num
+		    , (SELECT COUNT(*) FROM tb_cmmnty_sbscrber c
+		        WHERE c.CMMNTY_NO = N.CMMNTY_NO) join_num
+		FROM
+			TB_CMMNTY_SBSCRBER N, TB_CMMNTY C, TB_EMPL E
+		WHERE SBSCRBER_EMPNO = #{sbscrberEmpno}
+		AND APPROVE_AT = 'Y'
+		AND N.CMMNTY_NO = C.CMMNTY_NO
+		AND N.APPROVE_EMPNO = E.EMPNO
+		ORDER BY APPROVE_TM
+	</select>
+	
+	<!-- 가입한 회원 리스트 (승인 / 취소) -->
+	<select id="comAllMem" resultType="kr.or.ddit.community.vo.ComJoinVO" parameterType="int">
+		SELECT
+			N.CMMNTY_NO 
+			, C.SJ
+			, N.SBSCRBER_EMPNO
+			, E.NM
+			, N.APPROVE_EMPNO
+			, N.APPROVE_TM
+			, N.APPROVE_AT
+		FROM
+			TB_CMMNTY_SBSCRBER N, TB_EMPL E, TB_CMMNTY C
+		WHERE APPROVE_EMPNO = #{approveEmpno}
+		AND APPROVE_AT = 'N'
+		AND N.SBSCRBER_EMPNO = E.EMPNO
+		AND N.CMMNTY_NO = C.CMMNTY_NO
+		ORDER BY APPROVE_TM
+	</select>
+	
+	<!-- 가입한 회원 리스트 변경 -->
+	<update id="comAtUpdate" parameterType="kr.or.ddit.community.vo.ComJoinVO">
+		UPDATE
+			TB_CMMNTY_SBSCRBER
+		SET
+			APPROVE_AT = 'Y'
+		WHERE
+			CMMNTY_NO = #{cmmntyNo}
+			AND SBSCRBER_EMPNO = #{sbscrberEmpno}
+	</update>
+	
+	<!-- 가입한 회원 취소 -->
+	<delete id="comAtCancel" parameterType="kr.or.ddit.community.vo.ComJoinVO">
+		DELETE
+		FROM
+			TB_CMMNTY_SBSCRBER
+		WHERE
+			CMMNTY_NO = #{cmmntyNo}
+			AND SBSCRBER_EMPNO = #{sbscrberEmpno}
+	</delete>
+	
+	
+	<!-- Detail 커뮤니티 입장하기 -->
+	<!-- 해당 커뮤니티 기본상세 정보 -->
+	<select id="comDetail" resultType="kr.or.ddit.community.vo.CommuVO" parameterType="int">
+		SELECT N.CMMNTY_NO
+		    , N.ESTBL_EMPNO
+		    , E.NM
+		    , N.SJ
+		    , N.CN
+		    , N.RCRIT_AT
+		    , D.DEPT_NM
+		FROM TB_CMMNTY N, TB_EMPL E, TB_DEPT D
+		WHERE  N.CMMNTY_NO = #{cmmntyNo}
+		AND N.ESTBL_EMPNO = E.EMPNO
+		AND E.DEPT_CODE = D.DEPT_CODE
+	</select>
+	<!-- 해당 커뮤니티 회원 리스트 -->
+	<select id="comMemList" resultType="kr.or.ddit.community.vo.ComJoinVO" parameterType="int">
+		SELECT N.CMMNTY_NO
+			, N.SBSCRBER_EMPNO
+			, E.NM
+			, D.DEPT_NM
+		FROM TB_CMMNTY_SBSCRBER N, TB_EMPL E, TB_DEPT D
+		WHERE  N.CMMNTY_NO = #{cmmntyNo}
+		AND N.SBSCRBER_EMPNO = E.EMPNO
+		AND E.DEPT_CODE = D.DEPT_CODE
+	</select>
+	<!-- 해당 커뮤니티 게시판 리스트 (왼쪽)-->
+	<select id="comBoard" resultType="kr.or.ddit.community.vo.ComBoardVO" parameterType="int">
+		SELECT BBS_NO
+			, CMMNTY_NO
+			, BBS_NM
+			, BBS_TY
+		FROM TB_CMMNTY_BBS
+		WHERE CMMNTY_NO = #{cmmntyNo}
+		ORDER BY BBS_NO
+	</select>
+	<!-- 해당 커뮤니티 게시판에 해당하는 게시물 리스트 -->
+	<select id="comBBT" resultType="kr.or.ddit.community.vo.ComBBVO" parameterType="kr.or.ddit.community.vo.ComBBVO">
+		SELECT
+			N.CMMNTY_NO
+			, N.BBS_NO
+			, N.BBSCTT_NO
+			, N.WRTER_EMPNO
+			, N.SJ
+			, N.CN
+			, N.FILE_NO
+			, N.RDCNT
+			, N.WRITNG_TM
+			, E.NM
+			, (SELECT LIKE_AT
+				FROM TB_BBSCTT_LIKE
+				WHERE CMMNTY_NO = #{cmmntyNo}
+				AND BBS_NO = #{bbsNo}
+				AND BBSCTT_NO = #{bbscttNo}) LIKE_AT
+			, (SELECT LIKE_AT
+				FROM TB_BBSCTT_LIKE
+				WHERE CMMNTY_NO = #{cmmntyNo}
+				AND BBS_NO = #{bbsNo}
+				AND BBSCTT_NO = #{bbscttNo}
+				AND SBSCRBER_EMPNO = #{sbscrberEmpno}
+				AND LIKE_AT = 'Y') LIKE_COUNT
+		FROM
+			TB_BBSCTT N, TB_EMPL E
+		WHERE N.CMMNTY_NO = #{cmmntyNo}
+		AND N.BBS_NO = #{bbsNo}
+		AND N.WRTER_EMPNO = E.EMPNO
+	</select>
+	<!-- 해당 커뮤니티 게시판에 해당하는 게시물 상세 보기(댓글) -->
+<!-- 	<select id="comDetail" resultType="kr.or.ddit.community.vo.ComBBVO" parameterType="int"> -->
+		
+<!-- 	</select> -->
+	<!-- 해당 커뮤니티 공지게시판 최신게시글 5개 -->
+	<select id="comNewNotice" resultType="kr.or.ddit.community.vo.ComBBVO" parameterType="int">
+		SELECT
+			N.CMMNTY_NO
+			, N.BBS_NO
+			, N.BBSCTT_NO
+			, N.WRTER_EMPNO
+			, N.SJ
+			, N.CN
+			, N.RDCNT
+			, N.WRITNG_TM
+			, E.NM
+		FROM
+			TB_BBSCTT N, TB_EMPL E
+		WHERE N.CMMNTY_NO = #{cmmntyNo}
+		AND N.BBS_NO = 1
+		AND N.WRTER_EMPNO = E.EMPNO
+		<![CDATA[AND ROWNUM < 4]]>
+		ORDER BY N.BBSCTT_NO
+	</select>
+	<!-- 해당 커뮤니티 활동게시판 최신게시글 3개-->
+	<select id="comNewActive" resultType="kr.or.ddit.community.vo.ComBBVO" parameterType="kr.or.ddit.community.vo.ComBBVO">
+		SELECT
+			N.CMMNTY_NO
+			, N.BBS_NO
+			, N.BBSCTT_NO
+			, N.WRTER_EMPNO
+			, N.SJ
+			, N.CN
+			, N.FILE_NO
+			, N.RDCNT
+			, N.WRITNG_TM
+			, E.NM
+			, (SELECT LIKE_AT
+				FROM TB_BBSCTT_LIKE
+				WHERE CMMNTY_NO = #{cmmntyNo}
+				AND BBS_NO = 2
+				AND BBSCTT_NO = #{bbscttNo}
+				AND SBSCRBER_EMPNO = #{sbscrberEmpno}) LIKE_AT
+			, (SELECT LIKE_AT
+				FROM TB_BBSCTT_LIKE
+				WHERE CMMNTY_NO = #{cmmntyNo}
+				AND BBS_NO = 2
+				AND BBSCTT_NO = #{bbscttNo}
+				AND LIKE_AT = 'Y') LIKE_COUNT
+		FROM
+			TB_BBSCTT N, TB_EMPL E
+		WHERE N.CMMNTY_NO = #{cmmntyNo}
+		AND N.BBS_NO = 2
+		AND N.WRTER_EMPNO = E.EMPNO
+		<![CDATA[AND ROWNUM < 4]]>
+		ORDER BY N.BBSCTT_NO
+	</select>
+	<!-- Detail 커뮤니티 입장하기 -->
+	
+	
+	
+</mapper>

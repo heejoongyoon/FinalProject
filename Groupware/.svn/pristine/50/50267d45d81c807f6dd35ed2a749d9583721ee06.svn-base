@@ -1,0 +1,406 @@
+package kr.or.ddit.survey.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import kr.or.ddit.survey.mapper.SurveyMapper;
+import kr.or.ddit.survey.service.SurveyService;
+import kr.or.ddit.survey.vo.SurveyChartVO;
+import kr.or.ddit.survey.vo.SurveyVO;
+
+@Service
+public class SurveyServiceImpl implements SurveyService{
+	
+	@Autowired
+	SurveyMapper sm;
+	
+	// 설문 작성
+	@Override
+	public int createQustnr(SurveyVO surveyVO) {
+		int createQustnrResult = sm.createQustnr(surveyVO);
+		// 설문 등록 성공 시
+		if(createQustnrResult > 0) {
+			// insert된 설문의 번호
+			int qustnrNo = surveyVO.getQustnrNo();
+			// 설문 번호 세팅
+			surveyVO.setQustnrNo(qustnrNo);
+			
+			// ------ 1. 설문 대상자 등록 시작 --------
+			// 설문 대상자 배열에서 설문 대상자를 한 명씩 꺼냄
+			for(int i=0; i<surveyVO.getTrgterEmpnoArr().size(); i++) {
+				int trgterEmpno = surveyVO.getTrgterEmpnoArr().get(i);
+				// 하나씩 꺼낸 설문 대상자를 세팅
+				surveyVO.setTrgterEmpno(trgterEmpno);
+				// 설문 대상자 등록
+				sm.createTrgterEmpno(surveyVO);
+			}
+			// ---------------------------------
+			
+			// --------- 2. 문항 등록 시작 ----------
+			// 문항 번호를 담을 list
+			List<Integer> qesitmNoArr = new ArrayList<Integer>();
+			
+			// 문항 제목의 size 만큼 돌려서
+			for(int i=0; i<surveyVO.getCnArr().size(); i++) {
+				// 문항 번호먼저 등록
+				int createQesitmNoResult = sm.createQesitmNo(surveyVO);
+				// 문항 번호가 등록되면
+				if(createQesitmNoResult > 0) {
+					// qesitmNoArr에 해당 문항 번호들을 담기
+					qesitmNoArr.add(surveyVO.getQesitmNo());
+				}
+			}
+			// 담긴 각 문항번호를 surveyVO의 qesitmNoArr 변수에 담기
+			surveyVO.setQesitmNoArr(qesitmNoArr);
+			
+			// 문항 번호의 size 만큼 돌려서
+			for(int i=0; i<surveyVO.getQesitmNoArr().size(); i++) {
+				surveyVO.setQesitmNo(surveyVO.getQesitmNoArr().get(i));
+				// list로 되있는 문항 타입을 code변수에 넣기
+				surveyVO.setCode(surveyVO.getCodeArr().get(i));
+				// list로 되있는 문항 제목을 cn 변수에 넣기
+				surveyVO.setCn(surveyVO.getCnArr().get(i));
+				
+				sm.addQesitmInfo(surveyVO);
+				// ---------------------------------
+				
+				// --------- 3. 보기 등록 시작 ----------
+				
+				for(int j=0; j<surveyVO.getExNoArr().get(i).size(); j++) {
+					surveyVO.setExNo(surveyVO.getExNoArr().get(i).get(j));
+					surveyVO.setExCn(surveyVO.getExCnArr().get(i).get(j));
+					surveyVO.setExScore(surveyVO.getExScoreArr().get(i).get(j));
+					
+					sm.createEx(surveyVO);
+				}
+				
+				// ----------------------------------
+			}
+			
+		}
+		
+		return createQustnrResult;
+	}
+	
+	// 설문 삭제
+	@Override
+	public int deleteSurvey(int qustnrNo) {
+		return sm.deleteSurvey(qustnrNo);
+	}
+	
+	// 설문 임시저장
+	@Override
+	public int saveQustnr(SurveyVO surveyVO) {
+		int saveQustnrResult = sm.saveQustnr(surveyVO);
+		System.out.println("임시저장 성공? : " + saveQustnrResult);
+		// 설문 등록 성공 시
+		if(saveQustnrResult > 0) {
+			// insert된 설문의 번호
+			int qustnrNo = surveyVO.getQustnrNo();
+			// 설문 번호 세팅
+			surveyVO.setQustnrNo(qustnrNo);
+			
+			// ------ 1. 설문 대상자 등록 시작 --------
+			// 설문 대상자 배열에서 설문 대상자를 한 명씩 꺼냄
+			for(int i=0; i<surveyVO.getTrgterEmpnoArr().size(); i++) {
+				int trgterEmpno = surveyVO.getTrgterEmpnoArr().get(i);
+				// 하나씩 꺼낸 설문 대상자를 세팅
+				surveyVO.setTrgterEmpno(trgterEmpno);
+				// 설문 대상자 등록
+				sm.createTrgterEmpno(surveyVO);
+			}
+			// ---------------------------------
+			
+			// --------- 2. 문항 등록 시작 ----------
+			// 문항 번호를 담을 list
+			List<Integer> qesitmNoArr = new ArrayList<Integer>();
+			
+			// 문항 제목의 size 만큼 돌려서
+			for(int i=0; i<surveyVO.getCnArr().size(); i++) {
+				// 문항 번호먼저 등록
+				int createQesitmNoResult = sm.createQesitmNo(surveyVO);
+				// 문항 번호가 등록되면
+				if(createQesitmNoResult > 0) {
+					// qesitmNoArr에 해당 문항 번호들을 담기
+					qesitmNoArr.add(surveyVO.getQesitmNo());
+				}
+			}
+			// 담긴 각 문항번호를 surveyVO의 qesitmNoArr 변수에 담기
+			surveyVO.setQesitmNoArr(qesitmNoArr);
+			
+			// 문항 번호의 size 만큼 돌려서
+			for(int i=0; i<surveyVO.getQesitmNoArr().size(); i++) {
+				surveyVO.setQesitmNo(surveyVO.getQesitmNoArr().get(i));
+				// list로 되있는 문항 타입을 code변수에 넣기
+				surveyVO.setCode(surveyVO.getCodeArr().get(i));
+				// list로 되있는 문항 제목을 cn 변수에 넣기
+				surveyVO.setCn(surveyVO.getCnArr().get(i));
+				
+				sm.addQesitmInfo(surveyVO);
+				// ---------------------------------
+				
+				// --------- 3. 보기 등록 시작 ----------
+				
+				for(int j=0; j<surveyVO.getExNoArr().get(i).size(); j++) {
+					surveyVO.setExNo(surveyVO.getExNoArr().get(i).get(j));
+					surveyVO.setExCn(surveyVO.getExCnArr().get(i).get(j));
+					surveyVO.setExScore(surveyVO.getExScoreArr().get(i).get(j));
+					
+					sm.createEx(surveyVO);
+				}
+				
+				// ----------------------------------
+			}
+			
+		}
+		
+		return saveQustnrResult;
+	}
+	
+	// 설문 대상자 등록
+	@Override
+	public int createTrgterEmpno(SurveyVO surveyVO) {
+		return sm.createTrgterEmpno(surveyVO);
+	}
+	
+	// 문항 번호만 생성하여 문항 등록
+	@Override
+	public int createQesitmNo(SurveyVO surveyVO) {
+		return sm.createQesitmNo(surveyVO);
+	}
+	
+	// 문항 제목, 문항 타입 정보 추가
+	@Override
+	public int addQesitmInfo(SurveyVO surveyVO) {
+		return sm.addQesitmInfo(surveyVO);
+	}
+	
+	// 보기 등록
+	@Override
+	public int createEx(SurveyVO surveyVO) {
+		return sm.createEx(surveyVO);
+	}
+	
+	// 미참여한 모든 설문을 최신순으로 조회(4개)
+	@Override
+	public List<SurveyVO> AllsurveyListRspnsN(String empno) {
+		return sm.AllsurveyListRspnsN(empno);
+	}
+	
+	// 작성된 설문을 최신순으로 조회(15개)
+	@Override
+	public List<SurveyVO> surveyLatelyList(String empno) {
+		return sm.surveyLatelyList(empno);
+	}
+	
+	// 진행중인 설문 조회
+	@Override
+	public List<SurveyVO> runSurveyList(String empno) {
+		return sm.runSurveyList(empno);
+	}
+	
+	// 마감된 설문 조회
+	@Override
+	public List<SurveyVO> doneSurveyList(String empno) {
+		return sm.doneSurveyList(empno);
+	}
+	
+	// 내가 만든 설문 조회
+	@Override
+	public List<SurveyVO> mineSurveyList(String empno) {
+		return sm.mineSurveyList(empno);
+	}
+	
+	/* 설문 상세 조회 시작 */
+	
+	// 설문 + 파일 조회
+	@Override
+	public List<SurveyVO> detailSurveyList(int qustnrNo) {
+		return sm.detailSurveyList(qustnrNo);
+	}
+	// 설문 대상자 조회
+	@Override
+	public List<SurveyVO> detailSurveyTrgter(int qustnrNo) {
+		return sm.detailSurveyTrgter(qustnrNo);
+	}
+	// 설문 문항 조회
+	@Override
+	public List<SurveyVO> detailSurveyQesitm(int qustnrNo) {
+		return sm.detailSurveyQesitm(qustnrNo);
+	}
+	// 설문 보기 조회
+	@Override
+	public List<SurveyVO> detailSurveyEx(int qustnrNo) {
+		return sm.detailSurveyEx(qustnrNo);
+	}
+	
+	// 응답 결과 등록
+	@Override
+	public int createRspns(SurveyVO surveyVO) {
+		int result = 0;
+		for(int i=0; i<surveyVO.getQesitmNoArr().size(); i++) {
+			int qesitmNo = surveyVO.getQesitmNoArr().get(i);
+			int exNo = surveyVO.getRspnsExNoArr().get(i);
+			int rspnsScore = surveyVO.getRspnsScoreArr().get(i);
+			String rspnsCn = surveyVO.getRspnsCnArr().get(i);
+			
+			surveyVO.setQesitmNo(qesitmNo);
+			surveyVO.setExNo(exNo);
+			surveyVO.setRspnsScore(rspnsScore);
+			surveyVO.setRspnsCn(rspnsCn);
+			
+			
+			result = sm.createRspns(surveyVO);
+		}
+		
+		if(result > 0) {
+			return result;
+		}else {
+			return 0;
+		}
+	}
+	
+	// 응답 결과 수정
+	@Override
+	public int editRspns(SurveyVO surveyVO) {
+		int editResult = 0;
+		int deleteResult = 0;
+		
+		// 기존 응답결과 삭제
+		for(int i=0; i<surveyVO.getQesitmNoArr().size(); i++) {
+			int qesitmNo = surveyVO.getQesitmNoArr().get(i);
+			int beforeExNo = surveyVO.getBeforeExNoArr().get(i);
+			int rspnsScore = surveyVO.getRspnsScoreArr().get(i);
+			String rspnsCn = surveyVO.getRspnsCnArr().get(i);
+			
+			surveyVO.setQesitmNo(qesitmNo);
+			surveyVO.setExNo(beforeExNo);
+			surveyVO.setRspnsScore(rspnsScore);
+			surveyVO.setRspnsCn(rspnsCn);
+			
+			deleteResult = sm.deleteRspns(surveyVO);
+		}
+		
+		// 기존 응답 결과 삭제에 성공하면..
+		if(deleteResult > 0) {
+			// 새로운 응답결과 등록
+			for(int i=0; i<surveyVO.getQesitmNoArr().size(); i++) {
+				int qesitmNo = surveyVO.getQesitmNoArr().get(i);
+				int editExNo = surveyVO.getRspnsExNoArr().get(i);
+				int rspnsScore = surveyVO.getRspnsScoreArr().get(i);
+				String rspnsCn = surveyVO.getRspnsCnArr().get(i);
+				
+				surveyVO.setQesitmNo(qesitmNo);
+				surveyVO.setExNo(editExNo);
+				surveyVO.setRspnsScore(rspnsScore);
+				surveyVO.setRspnsCn(rspnsCn);
+				
+				editResult = sm.createRspns(surveyVO);
+			}
+		}
+		
+		if(editResult > 0) {
+			return editResult;
+		}else {
+			return 0;
+		}
+		
+	}
+		
+	// 응답 결과 삭제
+	@Override
+	public int deleteRspns(SurveyVO surveyVO) {
+		return sm.deleteRspns(surveyVO);
+	}
+	
+	// 세션에 따른 응답 여부 조회
+	@Override
+	public SurveyVO getRspnsAt(Map<String, Object> rspnsMap) {
+		return sm.getRspnsAt(rspnsMap);
+	}
+	
+	// 세션에 따른 응답 결과 전체 조회
+	@Override
+	public List<SurveyVO> rspnsResultList(Map<String, Object> rspnsResultMap) {
+		return sm.rspnsResultList(rspnsResultMap);
+	}
+	
+	// 설문 참여한 사람만 조회
+	@Override
+	public List<SurveyVO> rspnsEmpnoList(int qustnrNo) {
+		return sm.rspnsEmpnoList(qustnrNo);
+	}
+
+	/* 설문 상세 조회 끝 */
+	
+	// 응답 결과 차트를 위한 정보 조회
+	@Override
+	public List<SurveyChartVO> selectChartInfo(int qustnrNo) {
+		return sm.selectChartInfo(qustnrNo);
+	}
+	
+	/* 설문 상태 수정 시작*/
+	// 설문 진행으로 수정
+	@Override
+	public int surveyStatusEditRun(int qustnrNo) {
+		return sm.surveyStatusEditRun(qustnrNo);
+	}
+	
+	// 설문 완료(마감)로 수정
+	@Override
+	public int surveyStatusEditDone(int qustnrNo) {
+		return sm.surveyStatusEditDone(qustnrNo);
+	}
+	
+	// 설문 중지로 수정
+	@Override
+	public int surveyStatusEditStop(int qustnrNo) {
+		return sm.surveyStatusEditStop(qustnrNo);
+	}
+	/* 설문 상태 수정 끝*/
+
+	
+	// 설문 댓글 등록
+	@Override
+	public int createSurveyAnswer(SurveyVO surveyVO) {
+		return sm.createSurveyAnswer(surveyVO);
+	}
+	
+	// 설문 댓글 수정
+	@Override
+	public int editSurveyAnswer(SurveyVO surveyVO) {
+		return sm.editSurveyAnswer(surveyVO);
+	}
+	
+	// 설문 댓글 삭제
+	@Override
+	public int deleteSurveyAnswer(Map<String, Object> deleteAnswerMap) {
+		return sm.deleteSurveyAnswer(deleteAnswerMap);
+	}
+	
+	// 해당 설문에 대한 댓글 전체 조회
+	@Override
+	public List<SurveyVO> surveyAnswerList(int qustnrNo) {
+		return sm.surveyAnswerList(qustnrNo);
+	}
+
+	
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+
+
+}

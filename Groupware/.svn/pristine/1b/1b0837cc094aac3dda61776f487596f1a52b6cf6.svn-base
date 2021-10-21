@@ -1,0 +1,277 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<!-- 공통 css -->
+<link href="/resources/css/common/common.css" rel="stylesheet">
+<!-- 공통 js -->
+<script src="/resources/js/common/common.js"></script>
+<style>
+	.comDetailTitle {padding: 20px 20px 10px 20px; margin: 0px 40rem;}
+	.comDetailLately  { padding: 0px 4rem;
+    					margin: 0px 40rem;}
+	.row {padding: 30px;}
+	.row .divProfile, .divMem, .divActive, .divNotice {
+			background-color: white; border: 1px solid #ddd; border-radius: 10px; padding: 20px 20px 20px 20px; margin-bottom: 20px;
+	}
+	.row .title {font-weight: bold; font-size: 0.9rem;}
+	.row .divMemTitle, .activeTitle, .noticeTitle {font-weight: bold; font-size: 0.9rem; border-color: white; color: black; margin-bottom: 20px; }
+	.row .table a {color: black;}
+	
+	.row .memTable {border:none; padding:5px; font-size: 0.9rem;}
+	
+	.row .divProfile img {width: 50%;  max-width: 80px; min-height: 70px; margin: 0px 0px 10px 0px; border-radius: 50%;}
+	.row .divProfile p {margin-bottom: 0px;}
+	.row .divProfile p > span {font-weight: bold; font-size: 0.9rem; padding-left: 5px; color: black;}
+	.row .divProfile span {font-size: 0.8rem; color: #919191;}
+	
+	.row .upBtn {
+    	float: right;
+    	border-color: #55beff; background-color: #55beff; color: white;
+   	    border-radius: 10px;
+	}
+	
+	.row .upBtn:hover {background-color: #009dff; border-color: #009dff;}
+	.divShortcuts .btn {
+		background-color: white; 
+		font-size: 0.9rem; 
+		width: 46%; 
+		height: 50px; 
+		margin-left: 5px; 
+		margin-bottom: 7px; 
+		margin-top: 7px; 
+		border: 1px solid white; 
+		border-radius: 20px;
+		border: 2px solid #55beff;
+	   	font-size: 0.8rem;
+	   	color: black;
+	   	border-radius: 20px;
+	}
+	
+	.row .divMem p {margin: 0px; padding-top: 10px;}
+	.row .divMem .currentTime {font-size: 0.8rem; color: #888;}
+	.row .divMem h2 {display: inline;}
+	.row .divMem span {padding-right: 10px;}
+	.row .divMem .divMemTime {padding-top: 5px;}
+	.row .divMem .divTotalWorkGraph {width: 100%; background-color: #EEF1F6; margin-top: 7px; height: 10px;}
+	.row .divMem .divTotalWorkGraph {width: 100%; background-color: #EEF1F6; margin-top: 7px; height: 10px;}
+	.row .divMem .divRunWorkGraph {background-color: #55beff; width: 0; height: 10px;}
+	.row .divMem .divStartWorkTime {margin-top: 30px;}
+	.row .divMem .divEndWorkTime {padding-bottom: 20px; border-bottom: 1px dashed #dddddd;}
+	.row .divMem .spWorkTimeName {font-size: 0.8rem; font-weight: bold;}
+	.row .divMem .spWorkTime {float: right;}
+	.row .divMem .divMemBtn {margin-top: 20px;}
+	.row .divMem .divMemBtn #btnStartWork {float: left; width: 49%; height: 43px; margin-bottom: 7px;}
+	.row .divMem .divMemBtn #btnEndWork {float:right; width: 49%; height: 43px; margin-bottom: 7px;}
+	.row .divMem .divMemBtn #btnStatusWork {clear: both; width: 100%;}
+	.row .divMem .dropdown-menu {width: 210px; text-align: center; padding: 0px; border: 2px solid #55beff;}
+	.row .divMem .dropdown-menu ul {margin: 0px; padding: 0px; list-style: none;}
+	.row .divMem .dropdown-menu li {margin-top: 5px; cursor: pointer; font-size: 0.9rem; height: 30px; padding-top: 5px;}
+	.row .divMem .dropdown-menu li:hover {background-color: #EEF1F6}
+	.row .divMem .btn {border: 2px solid #55beff; font-size: 0.8rem; color: black; border-radius: 20px;}
+	.row .divMem .btn:hover {background-color: #55beff; color: white; font-weight: bold;}
+	
+	.row .nav .nav-item .nav-link {font-size: 0.8rem; padding: 10px 15px 10px 15px; font-weight: bold; color: #b1afaf;}
+	.row .nav .nav-item .nav-link:hover {border-color: white; color: black;}
+	.row .nav .nav-item .nav-link.active {border-color: white; border-bottom: 4px solid #55beff; color: black;}
+	
+	.row .divActive ul, .divNotice ul {margin-top: 10px; border-bottom: 0px;}	
+	.row .divActive .table .community-board a {color: black; font-size: 0.9rem;}
+	.row .divActive .table .community-board span {color: #888; font-size: 0.8rem; margin-right: 5px;}
+	.row .divActive .table .community-board .community-boardWriter {font-size: 0.7rem;}
+	
+	.row .divNotice .table td {font-size: 0.8rem;}
+	.row .divNotice .table span {color: #888;}
+	.row .divNotice{min-height: 373px;}
+	.row .tab-content1{min-height: 220px;}
+	.row .divActive{min-height: 299px;}
+	.row .tab-content2{min-height: 146px;}
+</style>
+<script type="text/javascript">
+	$(function(){
+		fn_getFullTime();	 
+		fn_getTime();		
+		setInterval(fn_getFullTime, 1000);
+		setInterval(fn_getTime, 1000);
+		
+	});
+	
+	// 년/월/일/요일/시/분/초 구하기
+	function fn_getFullTime(){
+		// 현재 시각
+		var now = new Date();
+		
+		// 년/월/일/요일
+		var year = now.getFullYear();
+		var month = now.getMonth() + 1;
+		var date = now.getDate();
+		var dayInt = now.getDay();
+		
+		// 요일(숫자)을 요일(한글)로 바꾸기
+		var week = new Array("일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일");
+		var dayStr = week[dayInt]; // 일요일
+		var day = dayStr.substring(0, 1); // 일
+		
+		// 시/분/초
+		var hour = now.getHours();
+		var min = now.getMinutes();
+		var sec = now.getSeconds();
+		
+		if(month < 10){
+			month = "0" + month;
+		}
+		if(date < 10){
+			date = "0" + date;
+		}
+		if(hour < 10){
+			hour = "0" + hour;
+		}
+		if(min < 10){
+			min = "0" + min;	
+		}
+		if(sec < 10){
+			sec = "0" + sec;
+		}
+		
+		var currentTime = year + "년 " + month + "월 " + date + "일 " + "(" + day + ") " + hour + ":" + min + ":" + sec;
+		
+		$(".currentTime").text(currentTime);
+	}
+	
+	// 시/분/초만 구하기
+	function fn_getTime(){
+		var now = new Date();
+		
+		
+		// 시/분/초
+		var hour = now.getHours();
+		var min = now.getMinutes();
+		var sec = now.getSeconds();
+		
+		if(hour < 10){
+			hour = "0" + hour;
+		}
+		if(min < 10){
+			min = "0" + min;	
+		}
+		if(sec < 10){
+			sec = "0" + sec;
+		}
+		
+		var currentTime = hour + ":" + min + ":" + sec;
+		
+		$(".spWorkTime").text(currentTime);
+	}
+
+	document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          locale : 'ko'
+        });
+        calendar.render();
+      });
+	
+</script>
+<div id="body">
+	<div class="comDetailTitle">
+		<h2>${commuVo.sj}</h2>
+	</div>
+	<div class="comDetailLately">
+		<span>${commuVo.cn}</span>
+	</div>
+	<div class="row">
+		<div class="col-sm-2">
+			<div class="divProfile" style="width: 100%; text-align: center;">
+				<img src="/resources/img/profile.png">
+				<p><span>${commuVo.nm}</span></p>
+				<span>${commuVo.deptNm}</span>
+				<div class="divShortcuts">
+					<button type="button" class="btn" style="width: 95%;"><i class="fas fa-sms fa-lg mr-2" style="color: darkorange"></i>메신저</button>
+				</div>
+			</div>
+			<div class="divMem">
+				<div class="divMemTitle">가입한 맴버</div>
+				<table class="memTable">
+					<colgroup>
+						<col width="80px">
+						<col width="auto">
+					</colgroup>
+					<c:forEach var="memList" items="${memList}">
+					<tr>
+						<td><span>${memList.nm}</span></td>
+						<td>${memList.dept}</td>
+					</tr>
+					</c:forEach>
+				</table>
+			</div>
+		</div>
+		<div class="col-sm-10">
+			<div class="divNotice">
+				<div class="noticeTitle">공지 사항
+					<button id="insertGo" type="button" class="upBtn" onclick="location.href='/com/noticeinsert?cmmntyNo=${commuVo.cmmntyNo}'">작성</button>
+				</div>
+				<div class="tab-content1">
+					<div class="tab-pane fade show active">
+						<table class="table">
+							<colgroup>
+								<col width="50px">
+								<col width="200px">
+								<col width="auto">
+								<col width="50px">
+								<col width="120px">
+								<col width="90px">
+								<col width="50px">
+							</colgroup>
+							<c:forEach var="comNoticeVO" items="${comNoticeVO}">
+							<tr>
+								<td>${comNoticeVO.rnum}</td>
+								<td>${comNoticeVO.sj}</td>
+								<td>${comNoticeVO.cn}</td>
+								<td>파일</td>
+								<td>${comNoticeVO.nm}</td>
+								<td>
+								<fmt:parseDate var="parsedDate" value="${comNoticeVO.writngTm}" pattern="yyyy-MM-dd HH:mm:ss.0"/>
+								<fmt:formatDate var="formatRegDate" value="${parsedDate}" pattern="yyyy-MM-dd"/>
+								${formatRegDate}
+								</td>
+								<td>${comNoticeVO.rdcnt}</td>
+							</tr>
+							</c:forEach>
+						</table>
+					</div>
+				</div>
+				<div class="Paging">
+					<ul>
+						<li><a href=""><i class="fas fa-step-backward"></i></a></li>
+						<li><a href=""><i class="fas fa-chevron-left"></i></a></li>
+						<li><a href="#">1</a></li>
+						<li><a href="#">2</a></li>
+						<li><a href="#">3</a></li>
+						<li><a href=""><i class="fas fa-chevron-right"></i></a></li>
+						<li><a href=""><i class="fas fa-step-forward"></i></a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="divActive">
+				<div class="activeTitle">활동 사진
+					<button id="insertGo" type="button" class="upBtn" onclick="location.href='/com/activeinsert?cmmntyNo=${commuVo.cmmntyNo}'">작성</button>
+				</div>
+				<div class="tab-content2">
+					<div class="tab-pane fade show active">
+					</div>
+				</div>
+				<div class="Paging">
+					<ul>
+						<li><a href=""><i class="fas fa-step-backward"></i></a></li>
+						<li><a href=""><i class="fas fa-chevron-left"></i></a></li>
+						<li><a href="#">1</a></li>
+						<li><a href="#">2</a></li>
+						<li><a href="#">3</a></li>
+						<li><a href=""><i class="fas fa-chevron-right"></i></a></li>
+						<li><a href=""><i class="fas fa-step-forward"></i></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

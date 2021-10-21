@@ -1,0 +1,129 @@
+package kr.or.ddit.notice.vo;
+
+import java.util.Date;
+import java.util.List;
+
+public class NoticeVO {
+	private int noticeNo;			// 공지 번호
+	private int wrterEmpno;			// 작성자 사번
+	private String sj;				// 제목
+	private String cn;				// 내용
+	private Date writngTm;			// 작성 시각
+	private String imprtncAt;		// 중요 여부 -> 파일여부
+	private int updtEmpno;			// 수정자 사번
+	private String updtTm;			// 수정 시각
+	private String fileNm;			// 파일 이름
+	private String fileCours;		// 파일 경로
+	private String fileOrginlNm;	// 파일 원본 이름
+	
+	private String nm;				// 작성자 사번의 이름
+
+	public int getNoticeNo() {
+		return noticeNo;
+	}
+
+	public void setNoticeNo(int noticeNo) {
+		this.noticeNo = noticeNo;
+	}
+
+	public int getWrterEmpno() {
+		return wrterEmpno;
+	}
+
+	public void setWrterEmpno(int wrterEmpno) {
+		this.wrterEmpno = wrterEmpno;
+	}
+
+	public String getSj() {
+		return sj;
+	}
+
+	public void setSj(String sj) {
+		this.sj = sj;
+	}
+
+	public String getCn() {
+		return cn;
+	}
+
+	public void setCn(String cn) {
+		this.cn = cn;
+	}
+
+	public Date getWritngTm() {
+		return writngTm;
+	}
+
+	public void setWritngTm(Date writngTm) {
+		this.writngTm = writngTm;
+	}
+
+	public String getImprtncAt() {
+		return imprtncAt;
+	}
+
+	public void setImprtncAt(String imprtncAt) {
+		this.imprtncAt = imprtncAt;
+	}
+
+	public int getUpdtEmpno() {
+		return updtEmpno;
+	}
+
+	public void setUpdtEmpno(int updtEmpno) {
+		this.updtEmpno = updtEmpno;
+	}
+
+	public String getUpdtTm() {
+		return updtTm;
+	}
+
+	public void setUpdtTm(String updtTm) {
+		this.updtTm = updtTm;
+	}
+
+	public String getFileNm() {
+		return fileNm;
+	}
+
+	public void setFileNm(String fileNm) {
+		this.fileNm = fileNm;
+	}
+
+	public String getFileCours() {
+		return fileCours;
+	}
+
+	public void setFileCours(String fileCours) {
+		this.fileCours = fileCours;
+	}
+
+	public String getFileOrginlNm() {
+		return fileOrginlNm;
+	}
+
+	public void setFileOrginlNm(String fileOrginlNm) {
+		this.fileOrginlNm = fileOrginlNm;
+	}
+
+	public String getNm() {
+		return nm;
+	}
+
+	public void setNm(String nm) {
+		this.nm = nm;
+	}
+
+	@Override
+	public String toString() {
+		return "NoticeVO [noticeNo=" + noticeNo + ", wrterEmpno=" + wrterEmpno + ", sj=" + sj + ", cn=" + cn
+				+ ", writngTm=" + writngTm + ", imprtncAt=" + imprtncAt + ", updtEmpno=" + updtEmpno + ", updtTm="
+				+ updtTm + ", fileNm=" + fileNm + ", fileCours=" + fileCours + ", fileOrginlNm=" + fileOrginlNm
+				+ ", nm=" + nm + "]";
+	}
+
+	
+	
+	
+	
+}

@@ -1,0 +1,45 @@
+package kr.or.ddit.community.vo;
+
+public class ComLikeVO {
+	private int CMMNTY_NO;		// 커뮤니티 번호
+	private int SBSCRBER_EMPNO;	// 가입자 사번
+	private int BBSCTT_NO;		// 게시글 번호
+	private int BBS_NO;			// 게시판 번호
+	private String LIKE_AT;		// 좋아요 여부
+	
+	@Override
+	public String toString() {
+		return "ComLikeVO [CMMNTY_NO=" + CMMNTY_NO + ", SBSCRBER_EMPNO=" + SBSCRBER_EMPNO + ", BBSCTT_NO=" + BBSCTT_NO
+				+ ", BBS_NO=" + BBS_NO + ", LIKE_AT=" + LIKE_AT + "]";
+	}
+	public int getCMMNTY_NO() {
+		return CMMNTY_NO;
+	}
+	public void setCMMNTY_NO(int cMMNTY_NO) {
+		CMMNTY_NO = cMMNTY_NO;
+	}
+	public int getSBSCRBER_EMPNO() {
+		return SBSCRBER_EMPNO;
+	}
+	public void setSBSCRBER_EMPNO(int sBSCRBER_EMPNO) {
+		SBSCRBER_EMPNO = sBSCRBER_EMPNO;
+	}
+	public int getBBSCTT_NO() {
+		return BBSCTT_NO;
+	}
+	public void setBBSCTT_NO(int bBSCTT_NO) {
+		BBSCTT_NO = bBSCTT_NO;
+	}
+	public int getBBS_NO() {
+		return BBS_NO;
+	}
+	public void setBBS_NO(int bBS_NO) {
+		BBS_NO = bBS_NO;
+	}
+	public String getLIKE_AT() {
+		return LIKE_AT;
+	}
+	public void setLIKE_AT(String lIKE_AT) {
+		LIKE_AT = lIKE_AT;
+	}
+}

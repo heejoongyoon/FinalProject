@@ -1,0 +1,20 @@
+package kr.or.ddit.EA.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@RequestMapping(value="/EA")
+@Controller
+public class EAController {
+
+	@RequestMapping(value="/home")
+	public String home() {
+		return "EA/home";
+	}
+	
+	@RequestMapping(value="/insert")
+	public String insert() {
+		return "EA/insert";
+	}
+	
+}

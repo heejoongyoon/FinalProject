@@ -1,0 +1,85 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.messenger.mapper.ChatMapper">
+
+<!-- 채팅 입력 -->
+<insert id="chatInsert" parameterType="chatVo">
+	INSERT INTO tb_chtt (
+    chtt_no
+   ,chtt_room_no
+   ,prtcpnt_empno
+   ,emtcn_no
+   ,cn
+   ,writng_tm
+   ,file_no
+   ,updt_empno
+   ,updt_tm
+) VALUES (
+    (SELECT NVL(MAX(chtt_no), 0) + 1 chtt_no
+	   FROM TB_CHTT)
+   ,#{chttRoomNo}
+   ,#{prtcpntEmpno}
+   ,null
+   ,#{cn}
+   ,sysdate
+   ,null
+   ,null
+   ,null
+)
+</insert>
+
+<!-- 참가자가 속한 채팅방 번호 조회 -->
+<select id="chatRoomList" parameterType="chatVo" resultType="String">
+	SELECT
+	    chtt_room_no
+	FROM
+	    tb_chtt_prtcpnt
+	WHERE Prtcpnt_Empno = #{prtcpntEmpno}
+</select>
+
+<!-- 참가자가 속한 채팅방의 채팅 내역 -->
+<select id="chatListByEmpno" parameterType="chatVo" resultType="chatVo">
+SELECT
+    chtt_no
+   ,chtt_room_no
+   ,prtcpnt_empno
+   ,nm
+   ,emtcn_no
+   ,cn
+   ,writng_tm
+   ,file_no
+   ,updt_empno
+   ,updt_tm
+FROM
+    tb_chtt, tb_empl
+WHERE chtt_Room_No in (SELECT
+                            chtt_room_no
+                        FROM
+                            tb_chtt_prtcpnt
+                        WHERE Prtcpnt_Empno = #{prtcpntEmpno})
+AND prtcpnt_empno = empno                        
+ORDER BY CHTT_NO ASC
+</select>
+
+<!-- 참가자의 마지막 채팅 -->
+<select id="chatLastByEmpno" parameterType="chatVo" resultType="chatVo">
+Select *
+FROM
+    (SELECT
+        chtt_no
+       ,chtt_room_no
+       ,prtcpnt_empno
+       ,nm
+       ,emtcn_no
+       ,cn
+       ,writng_tm
+       ,file_no
+       ,updt_empno
+       ,updt_tm
+    FROM
+        tb_chtt, tb_empl
+    WHERE prtcpnt_empno = empno
+    AND empno = #{prtcpntEmpno}
+    ORDER BY CHTT_NO DESC)
+WHERE ROWNUM = 1
+</select>
+</mapper>

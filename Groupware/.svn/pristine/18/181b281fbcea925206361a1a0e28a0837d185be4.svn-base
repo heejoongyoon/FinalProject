@@ -1,0 +1,140 @@
+package kr.or.ddit.community.vo;
+
+public class ComBBVO {
+	private int cmmntyNo;		// 커뮤니티 번호
+	private int bbsNo;      	// 게시판 번호
+	private int bbscttNo;  		// 게시글 번호
+	private int wrterEmpno;		// 글쓴이
+	private String sj;      	// 제목
+	private String cn;      	// 내용
+	private int fileNo;    		// 파일번호
+	private int rdcnt;      	// 조회 수
+	private String writngTm;   	// 작성 시각
+	private int updt_empno;  	// 수정자 사번
+	private String updtTm;     	// 수정 시각
+	
+	private String nm;			// 글쓴이 이름
+	private String likeAt;		// 좋아요 여부
+	private String likeCount;	// 좋아요 수
+	private String sbscrberEmpno;	// 
+	@Override
+	public String toString() {
+		return "ComBBVO [cmmntyNo=" + cmmntyNo + ", bbsNo=" + bbsNo + ", bbscttNo=" + bbscttNo + ", wrterEmpno="
+				+ wrterEmpno + ", sj=" + sj + ", cn=" + cn + ", fileNo=" + fileNo + ", rdcnt=" + rdcnt + ", writngTm="
+				+ writngTm + ", updt_empno=" + updt_empno + ", updtTm=" + updtTm + ", nm=" + nm + ", likeAt=" + likeAt
+				+ ", likeCount=" + likeCount + "]";
+	}
+
+	public String getLikeAt() {
+		return likeAt;
+	}
+
+	public void setLikeAt(String likeAt) {
+		this.likeAt = likeAt;
+	}
+
+	public String getLikeCount() {
+		return likeCount;
+	}
+
+	public void setLikeCount(String likeCount) {
+		this.likeCount = likeCount;
+	}
+
+	public int getCmmntyNo() {
+		return cmmntyNo;
+	}
+	
+	public void setCmmntyNo(int cmmntyNo) {
+		this.cmmntyNo = cmmntyNo;
+	}
+
+	public int getBbsNo() {
+		return bbsNo;
+	}
+
+	public void setBbsNo(int bbsNo) {
+		this.bbsNo = bbsNo;
+	}
+
+	public int getBbscttNo() {
+		return bbscttNo;
+	}
+
+	public void setBbscttNo(int bbscttNo) {
+		this.bbscttNo = bbscttNo;
+	}
+
+	public int getWrterEmpno() {
+		return wrterEmpno;
+	}
+
+	public void setWrterEmpno(int wrterEmpno) {
+		this.wrterEmpno = wrterEmpno;
+	}
+
+	public String getSj() {
+		return sj;
+	}
+
+	public void setSj(String sj) {
+		this.sj = sj;
+	}
+
+	public String getCn() {
+		return cn;
+	}
+
+	public void setCn(String cn) {
+		this.cn = cn;
+	}
+
+	public int getFileNo() {
+		return fileNo;
+	}
+
+	public void setFileNo(int fileNo) {
+		this.fileNo = fileNo;
+	}
+
+	public int getRdcnt() {
+		return rdcnt;
+	}
+
+	public void setRdcnt(int rdcnt) {
+		this.rdcnt = rdcnt;
+	}
+
+	public String getWritngTm() {
+		return writngTm;
+	}
+
+	public void setWritngTm(String writngTm) {
+		this.writngTm = writngTm;
+	}
+
+	public int getUpdt_empno() {
+		return updt_empno;
+	}
+
+	public void setUpdt_empno(int updt_empno) {
+		this.updt_empno = updt_empno;
+	}
+
+	public String getUpdtTm() {
+		return updtTm;
+	}
+
+	public void setUpdtTm(String updtTm) {
+		this.updtTm = updtTm;
+	}
+
+	public String getNm() {
+		return nm;
+	}
+
+	public void setNm(String nm) {
+		this.nm = nm;
+	}
+	
+}

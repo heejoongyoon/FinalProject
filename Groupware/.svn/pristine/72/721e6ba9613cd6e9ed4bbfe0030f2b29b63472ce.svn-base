@@ -1,0 +1,49 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<div class="surveyInfo">
+				<h3>ㅇㅇㅇ</h3>
+				<table class="table">
+					<colgroup>
+						<col width="120px">
+						<col width="auto">
+					</colgroup>
+					<tbody>
+						<tr class="trSurveyWriter">
+							<td>작성자</td>
+							<td>
+								<span>이영우&nbsp;회장</span>
+							</td>
+						</tr>
+						<tr class="trSurveyWriteDate">
+							<td>작성일</td>
+							<td><span>2021-10-08 19:58</span></td>
+						</tr>
+						<tr class="trSurveyDate">
+							<td>설문 기간</td>
+							<td><span>2021-10-08 ~ 2021-10-08</span></td>
+						</tr>
+						<tr class="trSurveyEditOption">
+							<td>참여 후 수정</td>
+							
+							<td><span>허용</span></td>
+							
+							
+						</tr>
+						<tr class="trSurveyResultOption">
+							<td>설문 결과</td>
+							
+							<td><span>공개</span></td>
+							
+							
+						</tr>
+					</tbody>
+				</table>
+				
+				
+				<div class="divSurveyDesc">
+					<p></p>
+					
+				</div>
+				
+			</div>

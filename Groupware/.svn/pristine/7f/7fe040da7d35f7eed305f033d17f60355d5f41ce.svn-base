@@ -1,0 +1,68 @@
+package kr.or.ddit.EA.controller;
+
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import kr.or.ddit.EA.service.EAService;
+import kr.or.ddit.EA.vo.DrftVO;
+import kr.or.ddit.login.vo.EmpVOList;
+
+@RequestMapping(value="/EA")
+@Controller
+public class EAController {
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	@Autowired
+	private EAService eaService;
+
+	@RequestMapping(value="/home")
+	public String home() {
+		return "EA/home";
+	}
+	
+	@RequestMapping(value="/insert", method=RequestMethod.GET)
+	public String insert() {
+		return "EA/insert";
+	}
+	
+	@RequestMapping(value="/insertDrft" ,method=RequestMethod.POST)
+	public String insertDrft(@ModelAttribute EmpVOList empVoList, DrftVO drftVo) {
+		
+		int result = eaService.insert(empVoList, drftVo);
+		if(result > 0) {
+			logger.info("기안서 등록 성공");
+		}else {
+			logger.info("기안서 등록 실패");
+		}
+		
+		return "redirect:/EA/home";
+	}
+	
+	@RequestMapping(value="/document", method=RequestMethod.GET)
+	public String document(Model model) {
+		
+		List<DrftVO> list = eaService.selectAll();
+		model.addAttribute("list", list);
+		
+		return "EA/document";
+	}
+	
+	@RequestMapping(value="/document/detail", method=RequestMethod.GET)
+	public String documentDetail(@RequestParam String drftNo) {
+		
+		logger.info(drftNo);
+		
+		return "EA/document";
+	}
+	
+}

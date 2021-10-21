@@ -1,0 +1,18 @@
+package kr.or.ddit.bogo.vo;
+
+import lombok.Data;
+
+@Data
+public class BogoVo {
+
+	
+	private int reprtListNo;  //보고서 목록번호
+	private int reprtNo;  //보고서 번호
+	private int reportrEmpno; // 보고자 사번
+	private String sj; //제목
+	private String cn; //내용
+	private String writngTm; //작성 시간
+	private int col; //파일 번호
+	private int updtEmpno; //수정자 사번
+	private String updtTm; // 수정 시각
+}

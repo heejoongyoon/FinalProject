@@ -1,0 +1,11 @@
+package kr.or.ddit.alarm.mapper;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import kr.or.ddit.alarm.vo.AlarmVO;
+
+@Mapper
+public interface AlarmMapper {
+	// 알람 등록
+	int createAlarm(AlarmVO alarmVO);
+}

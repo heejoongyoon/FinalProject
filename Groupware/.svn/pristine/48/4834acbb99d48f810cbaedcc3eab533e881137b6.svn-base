@@ -1,0 +1,566 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+ <style>
+	#body {background-color: #EEF1F6;}
+	.row {padding: 20px;}
+	.row .divProfile, .divWork, .divSimpleCommunity, .divSimpleMail, .divSimpleCalendar, .divSimpleSurvet {
+			background-color: white; border-radius: 10px; padding: 20px 20px 20px 20px; margin-bottom: 20px;
+		}
+	.row .title {font-weight: bold; font-size: 0.9rem;}
+	.row .table a {color: black;}
+		
+	.row .divProfile img {width: 50%;  max-width: 80px; min-height: 70px; margin: 0px 0px 10px 0px; border-radius: 50%;}
+	.row .divProfile p {margin-bottom: 0px;}
+	.row .divProfile p > span {font-weight: bold; font-size: 0.9rem; padding-left: 5px; color: black;}
+	.row .divProfile span {font-size: 0.8rem; color: #919191;}
+	
+	
+	.row .divWork p {margin: 0px; padding-top: 10px;}
+	.row .divWork .currentTime {font-size: 0.8rem; color: #888;}
+	.row .divWork h2 {display: inline;}
+	.row .divWork span {padding-right: 10px;}
+	.row .divWork .divWorkTime {padding-top: 5px;}
+	.row .divWork .divTotalWorkGraph {width: 100%; background-color: #EEF1F6; margin-top: 7px; height: 10px;}
+	.row .divWork .divTotalWorkGraph {width: 100%; background-color: #EEF1F6; margin-top: 7px; height: 10px;}
+	.row .divWork .divRunWorkGraph {background-color: lightskyblue; width: 0; height: 10px;}
+	.row .divWork .divStartWorkTime {margin-top: 30px;}
+	.row .divWork .divEndWorkTime {padding-bottom: 20px; border-bottom: 1px dashed #dddddd;}
+	.row .divWork .spWorkTimeName {font-size: 0.8rem; font-weight: bold;}
+	.row .divWork .spWorkTime {float: right;}
+	.row .divWork .divWorkBtn {margin-top: 20px;}
+	.row .divWork .divWorkBtn #btnStartWork {float: left; width: 49%; height: 43px; margin-bottom: 7px;}
+	.row .divWork .divWorkBtn #btnEndWork {float:right; width: 49%; height: 43px; margin-bottom: 7px;}
+	.row .divWork .divWorkBtn #btnStatusWork {clear: both; width: 100%;}
+	.row .divWork .dropdown-menu {width: 210px; text-align: center; padding: 0px;}
+	.row .divWork .dropdown-menu ul {margin: 0px; padding: 0px; list-style: none;}
+	.row .divWork .dropdown-menu li {margin-top: 5px; cursor: pointer; font-size: 0.9rem; height: 30px; padding-top: 5px;}
+	.row .divWork .dropdown-menu li:hover {background-color: #EEF1F6}
+	.row .divWork .btn {border: 2px solid lightskyblue; font-size: 0.8rem; color: black; border-radius: 20px;}
+	.row .divWork .btn:hover {background-color: lightskyblue; color: white; font-weight: bold;}
+	.row .divShortcuts .btn {background-color: white; font-size: 0.9rem; width: 46%; height: 50px; margin-left: 5px; margin-bottom: 7px; border: 1px solid white; border-radius: 20px;}
+	
+	.row .nav .nav-item .nav-link {font-size: 0.8rem; padding: 10px 15px 10px 15px; font-weight: bold; color: #b1afaf;}
+	.row .nav .nav-item .nav-link:hover {border-color: white; color: black;}
+	.row .nav .nav-item .nav-link.active {border-color: white; border-bottom: 4px solid lightskyblue; color: black;}
+	
+	.row .table tr {border-top: none; border-bottom: 1px solid #dee2e6;}
+	.row .divSimpleCommunity ul, .divSimpleMail ul {margin-top: 10px; border-bottom: 0px;}	
+	.row.divSimpleCommunity .table .community-board a {color: black; font-size: 0.9rem;}
+	.row .divSimpleCommunity .table .community-board span {color: #888; font-size: 0.8rem; margin-right: 5px;}
+	.row .divSimpleCommunity .table .community-board .community-boardWriter {font-size: 0.7rem;}
+	
+	.row .divSimpleMail .table td {font-size: 0.8rem;}
+	.row .divSimpleMail .table span {color: #888;}
+	
+	
+	.row .divSimpleSurvet .divSurvey {border: 1px solid #ddd; margin-top: 10px; width: 45%; border-radius: 8px; padding: 20px;}
+	.row .divSimpleSurvet .divSurvey header {padding-bottom: 15px;}
+	.row .divSimpleSurvet .divSurvey header .surveyCheckStatus {border: 1px solid #ff616b; background-color: #ff616b; color: white; font-size: 0.7rem; padding: 3px; font-weight: bold; border-radius: 3px;}
+	.row .divSimpleSurvet .divSurvey .surveyTitle {margin: 0px;}
+	.row .divSimpleSurvet .divSurvey .surveySubject {padding-bottom: 5px;}
+	.row .divSimpleSurvet .divSurvey .surveySubject span {font-size: 0.9rem; color: #888; padding-left: 3px;}
+	.row .divSimpleSurvet .divSurvey .surveyContent .table tr {border-color: white;}
+	.row .divSimpleSurvet .divSurvey .surveyContent .table td {border-color: white; font-size: 0.8rem; padding: 3px;}
+	.row .divSimpleSurvet .divSurvey .surveyContent .table td > span {color: #888;}
+	.row .divSimpleSurvet .divSurvey .divGoSurvey {text-align: center; border-top: 1px dashed #dddddd;}
+	.row .col-md-2 #btnGoSurvey {border: 2px solid lightskyblue; font-size: 0.8rem; color: black; border-radius: 20px; width: 100%; height: 50px;}
+	.row .col-md-2 #btnGoSurvey:hover {background-color: lightskyblue; color: white; font-weight: bold;}
+	
+	
+	<!-- 네비게이션 구분선 -->
+	.col-md-2 {
+		border-right: 1px solid #dee2e6;
+	}
+	
+	
+	
+</style>
+<script type="text/javascript">
+	$(function(){
+		fn_getFullTime();	 
+		fn_getTime();		
+		setInterval(fn_getFullTime, 1000);
+		setInterval(fn_getTime, 1000);
+		
+	});
+	
+	// 년/월/일/요일/시/분/초 구하기
+	function fn_getFullTime(){
+		// 현재 시각
+		var now = new Date();
+		
+		// 년/월/일/요일
+		var year = now.getFullYear();
+		var month = now.getMonth() + 1;
+		var date = now.getDate();
+		var dayInt = now.getDay();
+		
+		// 요일(숫자)을 요일(한글)로 바꾸기
+		var week = new Array("일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일");
+		var dayStr = week[dayInt]; // 일요일
+		var day = dayStr.substring(0, 1); // 일
+		
+		// 시/분/초
+		var hour = now.getHours();
+		var min = now.getMinutes();
+		var sec = now.getSeconds();
+		
+		if(hour < 10){
+			hour = "0" + hour;
+		}
+		if(min < 10){
+			min = "0" + min;	
+		}
+		if(sec < 10){
+			sec = "0" + sec;
+		}
+		
+		var currentTime = year + "년 " + month + "월 " + date + "일 " + "(" + day + ") " + hour + ":" + min + ":" + sec;
+		
+		$(".currentTime").text(currentTime);
+	}
+	
+	// 시/분/초만 구하기
+	function fn_getTime(){
+		var now = new Date();
+		
+		
+		// 시/분/초
+		var hour = now.getHours();
+		var min = now.getMinutes();
+		var sec = now.getSeconds();
+		
+		if(hour < 10){
+			hour = "0" + hour;
+		}
+		if(min < 10){
+			min = "0" + min;	
+		}
+		if(sec < 10){
+			sec = "0" + sec;
+		}
+		
+		var currentTime = hour + ":" + min + ":" + sec;
+		
+		$(".spWorkTime").text(currentTime);
+	}
+
+</script>
+<div id="body">
+
+	<section class="content-header">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-6">
+            <h1>받은 메일함</h1>
+          </div>
+          <div class="col-sm-6">
+           </div>
+         </div>
+
+        </div>
+<!--       </div>/.container-fluid -->
+    </section>
+    
+	<div class="row">
+		<div class="col-md-2">
+		
+		  <button id="btnGoSurvey" type="button" class="btn mb-3">메일 쓰기</button>
+		  
+          
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">메일함</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <ul class="nav nav-pills flex-column">
+                <li class="nav-item active">
+                  <a href="#" class="nav-link">
+                    <i class="fas fa-inbox"></i> 받은 메일함
+                    <span class="badge bg-primary float-right">12</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-envelope"></i> 보낸 메일함
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-file-alt"></i> Drafts
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="fas fa-filter"></i> Junk
+                    <span class="badge bg-warning float-right">65</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-trash-alt"></i> 휴지통
+                  </a>
+                </li>
+              </ul>
+            </div>
+            
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Labels</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <ul class="nav nav-pills flex-column">
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle text-danger"></i>
+                   
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle text-warning"></i> Promotions
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle text-primary"></i>
+                    Social
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          
+          <!-- /.card -->
+        </div>
+		<div class="col-md-10">
+			
+          <div class="card card-primary card-outline">
+            <div class="card-header">
+              <h3 class="card-title">Inbox</h3>
+
+              <div class="card-tools">
+                <div class="input-group input-group-sm">
+                  <input type="text" class="form-control" placeholder="Search Mail">
+                  <div class="input-group-append">
+                    <div class="btn btn-primary">
+                      <i class="fas fa-search"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+              <div class="mailbox-controls">
+                <!-- Check all button -->
+                <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="far fa-square"></i>
+                </button>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default btn-sm">
+                    <i class="far fa-trash-alt"></i>
+                  </button>
+                  <button type="button" class="btn btn-default btn-sm">
+                    <i class="fas fa-reply"></i>
+                  </button>
+                  <button type="button" class="btn btn-default btn-sm">
+                    <i class="fas fa-share"></i>
+                  </button>
+                </div>
+                <!-- /.btn-group -->
+                <button type="button" class="btn btn-default btn-sm">
+                  <i class="fas fa-sync-alt"></i>
+                </button>
+                <div class="float-right">
+                  1-50/200
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-default btn-sm">
+                      <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm">
+                      <i class="fas fa-chevron-right"></i>
+                    </button>
+                  </div>
+                  <!-- /.btn-group -->
+                </div>
+                <!-- /.float-right -->
+              </div>
+              <div class="table-responsive mailbox-messages">
+                <table class="table table-hover table-striped">
+                  <tbody>
+                  <tr>
+                    <td>
+                      <div class="icheck-primary">
+                        <input type="checkbox" value="" id="check1">
+                        <label for="check1"></label>
+                      </div>
+                    </td>
+                    <td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>
+                    <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
+                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                    </td>
+                    <td class="mailbox-attachment"></td>
+                    <td class="mailbox-date">5 mins ago</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="icheck-primary">
+                        <input type="checkbox" value="" id="check2">
+                        <label for="check2"></label>
+                      </div>
+                    </td>
+                    <td class="mailbox-star"><a href="#"><i class="fas fa-star-o text-warning"></i></a></td>
+                    <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
+                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                    </td>
+                    <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
+                    <td class="mailbox-date">28 mins ago</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="icheck-primary">
+                        <input type="checkbox" value="" id="check3">
+                        <label for="check3"></label>
+                      </div>
+                    </td>
+                    <td class="mailbox-star"><a href="#"><i class="fas fa-star-o text-warning"></i></a></td>
+                    <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
+                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                    </td>
+                    <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
+                    <td class="mailbox-date">11 hours ago</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="icheck-primary">
+                        <input type="checkbox" value="" id="check4">
+                        <label for="check4"></label>
+                      </div>
+                    </td>
+                    <td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>
+                    <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
+                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                    </td>
+                    <td class="mailbox-attachment"></td>
+                    <td class="mailbox-date">15 hours ago</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="icheck-primary">
+                        <input type="checkbox" value="" id="check5">
+                        <label for="check5"></label>
+                      </div>
+                    </td>
+                    <td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>
+                    <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
+                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                    </td>
+                    <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
+                    <td class="mailbox-date">Yesterday</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="icheck-primary">
+                        <input type="checkbox" value="" id="check6">
+                        <label for="check6"></label>
+                      </div>
+                    </td>
+                    <td class="mailbox-star"><a href="#"><i class="fas fa-star-o text-warning"></i></a></td>
+                    <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
+                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                    </td>
+                    <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
+                    <td class="mailbox-date">2 days ago</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="icheck-primary">
+                        <input type="checkbox" value="" id="check7">
+                        <label for="check7"></label>
+                      </div>
+                    </td>
+                    <td class="mailbox-star"><a href="#"><i class="fas fa-star-o text-warning"></i></a></td>
+                    <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
+                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                    </td>
+                    <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
+                    <td class="mailbox-date">2 days ago</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="icheck-primary">
+                        <input type="checkbox" value="" id="check8">
+                        <label for="check8"></label>
+                      </div>
+                    </td>
+                    <td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>
+                    <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
+                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                    </td>
+                    <td class="mailbox-attachment"></td>
+                    <td class="mailbox-date">2 days ago</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="icheck-primary">
+                        <input type="checkbox" value="" id="check9">
+                        <label for="check9"></label>
+                      </div>
+                    </td>
+                    <td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>
+                    <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
+                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                    </td>
+                    <td class="mailbox-attachment"></td>
+                    <td class="mailbox-date">2 days ago</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="icheck-primary">
+                        <input type="checkbox" value="" id="check10">
+                        <label for="check10"></label>
+                      </div>
+                    </td>
+                    <td class="mailbox-star"><a href="#"><i class="fas fa-star-o text-warning"></i></a></td>
+                    <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
+                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                    </td>
+                    <td class="mailbox-attachment"></td>
+                    <td class="mailbox-date">2 days ago</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="icheck-primary">
+                        <input type="checkbox" value="" id="check11">
+                        <label for="check11"></label>
+                      </div>
+                    </td>
+                    <td class="mailbox-star"><a href="#"><i class="fas fa-star-o text-warning"></i></a></td>
+                    <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
+                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                    </td>
+                    <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
+                    <td class="mailbox-date">4 days ago</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="icheck-primary">
+                        <input type="checkbox" value="" id="check12">
+                        <label for="check12"></label>
+                      </div>
+                    </td>
+                    <td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>
+                    <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
+                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                    </td>
+                    <td class="mailbox-attachment"></td>
+                    <td class="mailbox-date">12 days ago</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="icheck-primary">
+                        <input type="checkbox" value="" id="check13">
+                        <label for="check13"></label>
+                      </div>
+                    </td>
+                    <td class="mailbox-star"><a href="#"><i class="fas fa-star-o text-warning"></i></a></td>
+                    <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
+                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                    </td>
+                    <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
+                    <td class="mailbox-date">12 days ago</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="icheck-primary">
+                        <input type="checkbox" value="" id="check14">
+                        <label for="check14"></label>
+                      </div>
+                    </td>
+                    <td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>
+                    <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
+                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                    </td>
+                    <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
+                    <td class="mailbox-date">14 days ago</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="icheck-primary">
+                        <input type="checkbox" value="" id="check15">
+                        <label for="check15"></label>
+                      </div>
+                    </td>
+                    <td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>
+                    <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
+                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                    </td>
+                    <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
+                    <td class="mailbox-date">15 days ago</td>
+                  </tr>
+                  </tbody>
+                </table>
+                <!-- /.table -->
+              </div>
+              <!-- /.mail-box-messages -->
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer p-0">
+              <div class="mailbox-controls">
+                <!-- Check all button -->
+                <button type="button" class="btn btn-default btn-sm checkbox-toggle">
+                  <i class="far fa-square"></i>
+                </button>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default btn-sm">
+                    <i class="far fa-trash-alt"></i>
+                  </button>
+                  <button type="button" class="btn btn-default btn-sm">
+                    <i class="fas fa-reply"></i>
+                  </button>
+                  <button type="button" class="btn btn-default btn-sm">
+                    <i class="fas fa-share"></i>
+                  </button>
+                </div>
+                <!-- /.btn-group -->
+                <button type="button" class="btn btn-default btn-sm">
+                  <i class="fas fa-sync-alt"></i>
+                </button>
+                <div class="float-right">
+                  1-50/200
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-default btn-sm">
+                      <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm">
+                      <i class="fas fa-chevron-right"></i>
+                    </button>
+                  </div>
+                  <!-- /.btn-group -->
+                </div>
+                <!-- /.float-right -->
+              </div>
+            </div>
+          </div>
+          <!-- /.card -->
+        </div>
+	</div>
+</div>

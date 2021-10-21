@@ -1,0 +1,20 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.alarm.mapper.AlarmMapper">
+	<insert id="createAlarm" parameterType="alarmVO">
+		INSERT
+			INTO
+			TB_NEW
+		(NEW_NO
+			, NEW_EMPNO
+			, NEW_CN
+			, WRTING_DT
+			, NEW_AT
+			, DOCUMENT_NO)
+		VALUES((SELECT NVL(MAX(NEW_NO), 0)+1 AS newNo FROM TB_NEW)
+		, #{newEmpno}
+		, #{newCn}
+		, SYSDATE
+		, N
+		, #{documentNo})		
+	</insert>
+</mapper>

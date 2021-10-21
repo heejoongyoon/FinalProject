@@ -1,0 +1,921 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Insert title here</title>
+</head>
+<style>
+.left-menu-list {
+	position: absolute;
+	border-right: 1px solid #dee2e6;
+	height: 100%;
+	width: 260px;
+	float: left;
+}
+
+.lefr-menu-list-content {
+	margin-left: 260px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.left-menu-list a {
+	color: black;
+}
+
+.left-menu-list a:hover {
+	color: black;
+}
+
+.menu-name {
+	padding: 20px 20px 10px 20px;
+}
+
+.menu-create {
+	padding: 0px 20px 20px 20px;
+}
+
+.menu-list {
+	padding: 0px 20px 20px 20px;
+}
+
+.menu-list .menu-list-ul {
+	list-style: none;
+	padding-left: 0px;
+	margin-bottom: 0px;
+}
+
+.menu-list li {
+	padding-left: 40px;
+	margin-top: 3px;
+}
+
+.menu-list li:hover {
+	background-color: #f7f8f9;
+}
+
+.menu-list span {
+	font-size: 0.9rem;
+}
+
+.btn1 {
+	background-color: white !important;
+	border-radius: 60px !important;
+	width: 100px !important;
+	height: 54px !important;
+	margin-bottom: 5px !important;
+	border: 1px gray solid !important;
+}
+
+.btn2 {
+	text-align: center;
+	background-color: white !important;
+	border-radius: 60px !important;
+	width: 200px !important;
+	height: 54px !important;
+	margin-bottom: 20px !important;
+	border: 1px gray solid !important;
+}
+	#hello{
+	    font-size: 14px;
+	    font-family: 'Noto Sans KR',맑은 고딕,돋움, malgun gothic, dotum,AppleGothic,Helvetica,sans-serif;
+	    color: #333;
+	    white-space: normal;
+	    letter-spacing: -0.5px;
+	    font-weight: normal;
+	    word-break: break-all;
+	    margin: 0;
+	    padding: 0;
+		margin-left: 50px;
+		margin-right: 50px;
+		width: 90%;
+		height: 90%;
+	}    
+    .type_list_box, tr, td{
+    	border : 1px gray solid;
+    	
+    }
+    .type_list_box{
+     	width: 100%;
+     	height: 20%;
+	}
+	tr, td {
+		width: 90px;
+		higth: 20%;
+	}
+    .active {
+    	font-size : 1.3em;
+	    list-style-type: none;
+	    float : left;
+	    margin-left: 20px;
+    }
+	#title{
+		text-align: center;
+		background-color: #ebebeb;
+	}
+	
+	a {color: black;}
+	
+
+</style>
+<script type="text/javascript">
+
+</script>
+<body>
+	<div id="body">
+		<div class="left-menu">
+			<div class="left-menu-list">
+				<div class="menu-name">
+					<h2>
+						<a href="#">근태관리</a>
+					</h2>
+				</div>
+				<div class="menu-create">
+					<div class="Today"></div>
+					<div class="spWorkTime"
+						style="width: 60px; height: 25px; line-height: 25px; color: #666; font-size: 30px; text-align: center;"
+						id="sysdate"></div>
+					<div class="divStartWorkTime">
+						<span class="spWorkTimeName">출근시간</span>&nbsp;&nbsp;<span
+							class="spWorkTime" id="spWorkTime"> <c:if
+								test="${timeList[0].rcordCode eq 'D101'}">${timeList[0].tm2}</c:if></span>
+					</div>
+					<div class="divEndWorkTime">
+						<span class="spWorkTimeName">퇴근시간</span>&nbsp;&nbsp;<span
+							class="spWorkTime" id="spWorkTimeEnd"> <c:if
+								test="${timeList[1].rcordCode eq 'D102'}">${timeList[1].tm2}</c:if></span>
+					</div>
+					<div class="divEndWorkTime">
+						<span class="spWorkTimeName">주간 누적 근무시간</span>&nbsp;&nbsp; <span
+							id="weeklyworktime"> <c:if test="${list[0].empNo ne null}">
+						${list4[0].tmh}h ${list4[0].tmm}m
+						</c:if>
+						</span>
+					</div>
+					<div class="divWorkBtn">
+						<button id="btnStartWork" type="button" class="btn1">출근</button>
+						<button id="btnEndWork" type="button" class="btn1">퇴근</button>
+						<select name="select" id="select" class="btn2">
+							<option value='' selected>업 무 상 태 변 경</option>
+							<option value='task'>업무</option>
+							<option value='taskend'>업무종료</option>
+							<option value='outsidework'>외근</option>
+							<option value='business'>출장</option>
+							<option value='halfway'>반차</option>
+						</select>
+					</div>
+				</div>
+				<form action="/ehr/time" method="post" id="fm">
+					<input type="hidden" id="empNo" class="fadeIn first" name="empNo">
+					<input type="hidden" id="spWorkTime" class="fadeIn first"
+						name="spWorkTime"> <input type="hidden" id="spWorkTimeEnd"
+						class="fadeIn second" name="spWorkTimeEnd"> <input
+						type="hidden" id="rcordCode" class="fadeIn third" name="rcordCode">
+					<input type="hidden" id="workAccmltTm2" class="fadeIn first"
+						name="workAccmltTm">
+				</form>
+
+				<div class="menu-list">
+					<a href="#" class="toggle-menu-list"><i
+						class="fas fa-angle-down mr-2"></i><strong>근태관리</strong></a>
+					<ul class="menu-list-ul">
+						<li><a href="/ehr/content"><span>내 근태관리</span></a></li>
+						<li><a href="/ehr/vacation"><span>내 연차 내역</span></a></li>
+						<li><a href="/ehr/info"><span>내 인사 정보</span></a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="lefr-menu-list-content">
+				<!-- 메뉴에 따른 내용 -->
+				<div id="hello">
+					<header class="content_top">
+						<!-- 인사카드 Title -->
+						<h1>
+							<span class="txt single_txt">인사정보</span>
+						</h1>
+					</header>
+					<!-- content -->
+					<div class="content_page">
+						<div class="ehr_basic_info">
+							<div style="width: 100%; height: 900px;">
+								<table class="type_list_box">
+									<tbody>
+										<tr>
+											<td class="name" style="text-align: center">이름</td>
+											<td class="name" style="text-align: center">소속</td>
+											<td class="last" colspan="3">Ms그룹</td>
+										</tr>
+										<tr>
+											<td class="name_txt" rowspan="3" style="text-align: center">
+												<p class="kor">김상후</p>
+												<p class="eng"></p>
+											</td>
+											<td class="number" style="text-align: center">사번</td>
+											<td class="number_txt"></td>
+											<td class="telephone" style="text-align: center">내선번호</td>
+											<td class="telephone_txt last">070-4451-4584</td>
+										</tr>
+										<tr>
+											<td class="email" style="text-align: center">이메일</td>
+											<td class="email_txt">hoodemo@dodemo.com</td>
+											<td class="mobile" style="text-align: center">휴대번호</td>
+											<td class="mobile_txt last">010-1234-5678</td>
+										</tr>
+										<tr>
+											<td class="rank" style="text-align: center">직위 / 직책</td>
+											<td class="rank_txt">대표이사 /</td>
+											<td class="phone" style="text-align: center">대표전화</td>
+											<td class="phone_txt last"></td>
+										</tr>
+									</tbody>
+								</table>
+								<div class="divSimpleCommunity">
+									<ul class="nav nav-tabs">
+										<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#info1">기본</a></li>
+										<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#info2">신상</a></li>
+										<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#info3">직무/담당</a></li>
+										<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#info4">발령</a></li>
+										<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#info5">경력</a></li>
+										<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#info6">포상/징계</a></li>
+										<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#info7">인사평가</a></li>
+										<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#info8">교육</a></li>
+										<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#info9">자격</a></li>
+										<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#info10">어학</a></li>
+										<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#info11">병역</a></li>
+										<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#info12">해외출장</a></li>
+										<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#info13">학력</a></li>
+										<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#info14">가족</a></li>
+									</ul>
+
+									<div class="tab-content">
+										<div class="tab-pane fade show active" id="info1">
+											<h3 class="tab_title">기본 정보</h3>
+											<form id="data_form">
+												<table class="type_list_box"
+													style="width: 100%; height: 200px;">
+													<tbody>
+														<tr>
+															<td class="col1" id="title"><span class="title_txt">입사일</span></td>
+															<td class="col2">2019-06-01</td>
+															<td class="col3" id="title"><span class="title_txt">직무</span></td>
+															<td class="col4"><span class="txt">ㄹㅇㄹ</span></td>
+															<td class="col5" id="title"><span class="title_txt">직종</span></td>
+															<td class="col6"><span class="txt">ㄹㅇㄹㅇ</span></td>
+															<td class="col7" id="title"><span class="title_txt">직군</span></td>
+															<td class="col8"><span class="txt">ㄹㅇㄹㅇ</span></td>
+														</tr>
+														<tr>
+															<td class="col1" id="title"><span class="title_txt">채용구분</span></td>
+															<td class="col2">경력</td>
+															<td class="col3" id="title"><span class="title_txt">직원구분</span></td>
+															<td class="col4"><span class="txt">ㄹㅇㄹㅇㄹ</span></td>
+															<td class="col5" id="title"><span class="title_txt">급여구분</span></td>
+															<td class="col6"><span class="txt">ㄹㅇㄹㅇ</span></td>
+															<td class="col7" id="title"><span class="title_txt">추천자</span></td>
+															<td class="col8"><span class="txt">ㄹㅇㄹㅇ</span></td>
+														</tr>
+														<tr>
+															<td class="col1" id="title"><span class="title_txt">상태</span></td>
+															<td class="col2"><span class="txt"></span></td>
+															<td class="col3" id="title"><span class="title_txt">생년월일</span></td>
+															<td class="col4">2021-05-11&nbsp;</td>
+															<td class="col5" id="title"><span class="title_txt">성별</span></td>
+															<td class="col6">남자</td>
+															<td class="col7" id="title"><span class="title_txt">결혼여부</span></td>
+															<td class="col8">미혼</td>
+														</tr>
+														<tr>
+															<td class="col1" id="title"><span class="title_txt">장애여부</span></td>
+															<td class="col2">N</td>
+															<td class="col3" id="title"><span class="title_txt">보훈여부</span></td>
+															<td class="col4"></td>
+															<td class="col5" id="title"><span class="title_txt">퇴사일</span></td>
+															<td class="col6">2021-07-09</td>
+															<td class="col7" id="title"><span class="title_txt">퇴직사유</span></td>
+															<td class="col8"><span class="txt">ㄹㅇㄹㅇㄹ</span></td>
+														</tr>
+													</tbody>
+												</table>
+											</form>
+										</div>
+										<div class="tab-pane fade" id="info2">
+											<h3 class="tab_title">신상 정보</h3>
+											<!--탭 전체 펼치기시 타이틀 나옴-->
+											<form id="data_form">
+												<table class="type_list_box"
+													style="width: 100%; height: 200px;">
+													<tbody>
+														<tr>
+															<td class="col1" id="title"><span class="title_txt">취미</span></td>
+															<td class="col2"><span class="txt"></span></td>
+															<td class="col3" id="title"><span class="title_txt">특기</span></td>
+															<td class="col4"><span class="txt"></span></td>
+															<td class="col5" id="title"><span class="title_txt">팩스</span></td>
+															<td class="col6"><span class="txt"></span></td>
+															<td class="col7" id="title"><span class="title_txt">취업방법</span></td>
+															<td class="col8"><span class="txt"></span></td>
+														</tr>
+														<tr>
+															<td class="col1" id="title"><span class="title_txt">주소</span></td>
+															<td colspan="5"><span class="txt"></span></td>
+															<td class="col7" id="title"><span class="title_txt">자택번호</span></td>
+															<td class="col8"><span class="txt"></span></td>
+														</tr>
+														<tr>
+															<td class="col1" id="title"><span class="title_txt">보훈번호</span></td>
+															<td colspan="3"><span class="txt"></span></td>
+															<td class="col5" id="title"><span class="title_txt">보훈가족</span></td>
+															<td class="col6"><span class="txt"></span></td>
+															<td class="col7" id="title"><span class="title_txt">보훈구분</span></td>
+															<td class="col8"><span class="txt"></span></td>
+														</tr>
+														<tr>
+															<td class="col1" id="title"><span class="title_txt">장애등록번호</span></td>
+															<td class="col2"><span class="txt"></span></td>
+															<td class="col3" id="title"><span class="title_txt">장애구분</span></td>
+															<td class="col4"><span class="txt"></span></td>
+															<td class="col5" id="title"><span class="title_txt">장애등급</span></td>
+															<td class="col6"><span class="txt"></span></td>
+															<td class="col7" id="title"><span class="title_txt">장애인정구분</span></td>
+															<td class="col8"><span class="txt"></span></td>
+														</tr>
+														<tr>
+															<td class="col1" id="title"><span class="title_txt">계좌유형</span></td>
+															<td class="col2"><span class="txt"></span></td>
+															<td class="col3" id="title"><span class="title_txt">은행</span></td>
+															<td class="col4"><span class="txt"></span></td>
+															<td class="col5" id="title"><span class="title_txt">예금주</span></td>
+															<td class="col6"><span class="txt"></span></td>
+															<td class="col7" id="title"><span class="title_txt">비고</span></td>
+															<td class="col8"><span class="txt"></span></td>
+														</tr>
+														<tr>
+															<td class="col1" id="title"><span class="title_txt">계좌번호</span></td>
+															<td colspan="3"><span class="txt"></span></td>
+															<td class="col5" id="title"><span class="title_txt">시작일자</span></td>
+															<td class="col6"></td>
+															<td class="col7" id="title"><span class="title_txt">종료일자</span></td>
+															<td class="col6"></td>
+														</tr>
+													</tbody>
+												</table>
+											</form>
+										</div>
+										<div class="tab-pane fade" id="info3">
+											<h3 class="tab_title">직무/담당</h3>
+											<table class="type_list_box">
+												<tbody>
+													<tr id="title">
+														<td class="num"><span class="title_txt">No</span></td>
+														<td class="group"><span class="title_txt">직군</span></td>
+														<td class="category"><span class="title_txt">직종</span></td>
+														<td class="jop"><span class="title_txt">직무</span></td>
+														<td class="date"><span class="title_txt">시작일</span></td>
+														<td class="date"><span class="title_txt">종료일</span></td>
+														<td class="percent"><span class="title_txt">비중</span></td>
+														<td class="work"><span class="title_txt">담당업무</span></td>
+													</tr>
+													<tr class="dataRow" data-id="">
+														<td class="num"><span>1</span></td>
+														<td class="group"><span class="txt"></span></td>
+														<td class="category"><span class="txt"></span></td>
+														<td class="jop"><span class="txt"></span></td>
+														<td class="date"></td>
+														<td class="date"></td>
+														<td class="percent"><span class="txt"></span></td>
+														<td class="work"><span class="txt"></span></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="tab-pane fade" id="info4">
+											<h3 class="tab_title">발령</h3>
+											<table class="type_list_box">
+												<tbody>
+													<tr id="title">
+														<td class="num"><span class="title_txt">No</span></td>
+														<td class="date"><span class="title_txt">발령일</span></td>
+														<td class="division"><span class="title_txt">구분</span></td>
+														<td class="reason"><span class="title_txt">발령명</span></td>
+														<td class="state"><span class="title_txt">직원구분</span></td>
+														<td class="team"><span class="title_txt">소속</span></td>
+														<td class="level"><span class="title_txt">급여단계</span></td>
+														<td class="jop"><span class="title_txt">직책</span></td>
+														<td class="work"><span class="title_txt">담당업무</span></td>
+													</tr>
+													<tr class="dataRow" data-id="">
+														<td class="num"><span>1</span></td>
+														<td class="date"><span class="txt"></span></td>
+														<td class="division"><span class="txt"></span></td>
+														<td class="reason"><span class="txt"></span></td>
+														<td class="state"><span class="txt"></span></td>
+														<td class="team"><span class="txt"></span></td>
+														<td class="level"><span class="txt"></span></td>
+														<td class="jop"><span class="txt"></span></td>
+														<td class="work"><span class="txt"></span></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="tab-pane fade" id="info5">
+											<h3 class="tab_title">경력</h3>
+											<table class="type_list_box">
+												<tbody>
+													<tr id="title">
+														<td class="num"><span class="title_txt">No</span></td>
+														<td class="date"><span class="title_txt">시작일</span></td>
+														<td class="date"><span class="title_txt">종료일</span></td>
+														<td class="workplace"><span class="title_txt">근무처</span></td>
+														<td class="position"><span class="title_txt">직위</span></td>
+														<td class="jop"><span class="title_txt">담당업무</span></td>
+														<td class="period"><span class="title_txt">근속기간</span></td>
+														<td class="cause"><span class="title_txt">퇴직사유</span></td>
+													</tr>
+													<tr class="dataRow">
+														<td class="num"><span>1</span></td>
+														<td class="date"></td>
+														<td class="date"></td>
+														<td class="workplace"><span class="txt"></span></td>
+														<td class="position"><span class="txt"></span></td>
+														<td class="jop"><span class="txt"></span></td>
+														<td class="period"><span class="txt"></span></td>
+														<td class="cause"><span class="txt"></span></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="tab-pane fade" id="info6">
+											<h3 class="tab_title">포상/징계</h3>
+											<table class="type_list_box">
+												<tbody>
+													<tr id="title">
+														<td class="num"><span class="title_txt">No</span></td>
+														<td class="division"><span class="title_txt">구분</span></td>
+														<td class="date"><span class="title_txt">일자</span></td>
+														<td class="reason"><span class="title_txt">내용</span></td>
+														<td class="cause"><span class="title_txt">사유</span></td>
+														<td class="etc"><span class="title_txt">기타</span></td>
+													</tr>
+													<tr class="dataRow" data-id="">
+														<td class="num"><span>1</span></td>
+														<td class="division"><span class="txt"></span></td>
+														<td class="date"></td>
+														<td class="reason"><span class="txt"></span></td>
+														<td class="cause"><span class="txt"></span></td>
+														<td class="etc"><span class="txt"></span></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="tab-pane fade" id="info7">
+											<h3 class="tab_title">인사평가</h3>
+											<!--탭 전체 펼치기시 타이틀 나옴-->
+											<table class="type_list_box">
+												<tbody>
+													<tr id="title">
+														<td class="num"><span class="title_txt">No</span></td>
+														<td class="year"><span class="title_txt">평가년도</span></td>
+														<td class="capability"><span class="title_txt">역량</span></td>
+														<td class="result"><span class="title_txt">성과</span></td>
+														<td class="evaluator"><span class="title_txt">평가자</span></td>
+														<td class="team"><span class="title_txt">조직</span></td>
+														<td class="etc"><span class="title_txt">기타</span></td>
+													</tr>
+													<tr class="dataRow" data-id="1">
+														<td class="num"><span>1</span></td>
+														<td class="year"><span class="txt"></span></td>
+														<td class="capability"><span class="txt"></span></td>
+														<td class="result"><span class="txt"></span></td>
+														<td class="evaluator"><span class="txt"></span></td>
+														<td class="team"><span class="txt"></span></td>
+														<td class="etc"><span class="txt"></span></td>
+													</tr>
+													<tr class="dataRow" data-id="2">
+														<td class="num"><span>2</span></td>
+														<td class="year"><span class="txt"></span></td>
+														<td class="capability"><span class="txt"></span></td>
+														<td class="result"><span class="txt"></span></td>
+														<td class="evaluator"><span class="txt"></span></td>
+														<td class="team"><span class="txt"></span></td>
+														<td class="etc"><span class="txt"></span></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="tab-pane fade" id="info8">
+											<h3 class="tab_title">교육</h3>
+											<table class="type_list_box">
+												<tbody>
+													<tr id="title">
+														<td class="num"><span class="title_txt">No</span></td>
+														<td class="class"><span class="title_txt">교육과정</span></td>
+														<td class="division"><span class="title_txt">교육유형</span></td>
+														<td class="date"><span class="title_txt">시작일</span></td>
+														<td class="date"><span class="title_txt">종료일</span></td>
+														<td class="academy"><span class="title_txt">교육기관</span></td>
+													</tr>
+													<tr class="dataRow">
+														<td class="num"><span>1</span></td>
+														<td class="class"><span class="txt"></span></td>
+														<td class="division"><span class="txt"></span></td>
+														<td class="date"><span class="txt"></span> <!--  --></td>
+														<td class="date"><span class="txt"></span> <!--  --></td>
+														<td class="academy"><span class="txt"></span></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="tab-pane fade" id="info9">
+											<h3 class="tab_title">자격</h3>
+											<table class="type_list_box">
+												<tbody>
+													<tr id="title">
+														<td class="num"><span class="title_txt">No</span></td>
+														<td class="division"><span class="title_txt">구분</span></td>
+														<td class="name"><span class="title_txt">자격명</span></td>
+														<td class="number"><span class="title_txt">자격번호</span></td>
+														<td class="level"><span class="title_txt">자격등급</span></td>
+														<td class="academy"><span class="title_txt">기관명</span></td>
+														<td class="date"><span class="title_txt">취득일</span></td>
+														<td class="date"><span class="title_txt">정지일</span></td>
+													</tr>
+													<tr class="dataRow">
+														<td class="num"><span>1</span></td>
+														<td class="division"><span class="txt"></span></td>
+														<td class="name"><span class="txt"></span></td>
+														<td class="number"><span class="txt"></span></td>
+														<td class="level"><span class="txt"></span></td>
+														<td class="academy"><span class="txt"></span></td>
+														<td class="date"><span class="txt"></span> <!--  --></td>
+														<td class="date"><span class="txt"></span> <!--  --></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="tab-pane fade" id="info10">
+											<h3 class="tab_title" style="">어학</h3>
+											<table class="type_list_box">
+												<tbody>
+													<tr id="title">
+														<td class="num"><span class="title_txt">No</span></td>
+														<td class="division"><span class="title_txt">구분</span></td>
+														<td class="name"><span class="title_txt">어학명</span></td>
+														<td class="date"><span class="title_txt">평가일</span></td>
+														<td class="academy"><span class="title_txt">평가기관</span></td>
+														<td class="score"><span class="title_txt">점수</span></td>
+														<td class="level"><span class="title_txt">등급</span></td>
+														<td class="etc"><span class="title_txt">기타</span></td>
+													</tr>
+													<tr class="dataRow">
+														<td class="num"><span>1</span></td>
+														<td class="division"><span class="txt"></span></td>
+														<td class="name"><span class="txt"></span></td>
+														<td class="date"><span class="txt"></span> <!--  --></td>
+														<td class="academy"><span class="txt"></span></td>
+														<td class="score"><span class="txt"></span></td>
+														<td class="level"><span class="txt"></span></td>
+														<td class="etc"><span class="txt"></span></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="tab-pane fade" id="info11">
+											<h3 class="tab_title">병역</h3>
+											<table class="type_list_box">
+												<tbody>
+													<tr id="title">
+														<td class="num"><span class="title_txt">No</span></td>
+														<td class="class"><span class="title_txt">군벌</span></td>
+														<td class="level"><span class="title_txt">계급</span></td>
+														<td class="number"><span class="title_txt">군번</span></td>
+														<td class="division"><span class="title_txt">전역구분</span></td>
+														<td class="date"><span class="title_txt">입대일</span></td>
+														<td class="date"><span class="title_txt">제대일</span></td>
+														<td class="etc"><span class="title_txt">기타 사유</span></td>
+													</tr>
+													<tr class="dataRow" data-id="">
+														<td class="num"><span>1</span></td>
+														<td class="class"><span class="txt"></span></td>
+														<td class="level"><span class="txt"></span></td>
+														<td class="number"><span class="txt"></span></td>
+														<td class="division"><span class="txt"></span></td>
+														<td class="date"><span class="txt"></span> <!--  --></td>
+														<td class="date"><span class="txt"></span> <!--  --></td>
+														<td class="etc"><span class="txt"></span></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="tab-pane fade" id="info12">
+											<h3 class="tab_title">해외출장</h3>
+											<table class="type_list_box">
+												<tbody>
+													<tr id="title">
+														<td class="num"><span class="title_txt">No</span></td>
+														<td class="period"><span class="title_txt">기간</span></td>
+														<td class="country"><span class="title_txt">출장국가</span></td>
+														<td class="area"><span class="title_txt">출장지</span></td>
+														<td class="purpose"><span class="title_txt">출장목적</span></td>
+													</tr>
+													<tr class="dataRow" data-id="">
+														<td class="num"><span>1</span></td>
+														<td class="period">
+															<div class="date_wrap">
+																<span class="txt"></span> <span class="date_wave">~</span>
+																<span class="txt"></span>
+															</div>
+														</td>
+														<td class="country"><span class="txt"></span></td>
+														<td class="area"><span class="txt"></span></td>
+														<td class="purpose"><span class="txt"></span></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="tab-pane fade" id="info13">
+											<h3 class="tab_title">학력</h3>
+											<table class="type_list_box">
+												<tbody>
+													<tr id="title">
+														<td class="num"><span class="title_txt">No</span></td>
+														<td class="class"><span class="title_txt">구분</span></td>
+														<td class="school"><span class="title_txt">학교명</span></td>
+														<td class="date"><span class="title_txt">입학년도</span></td>
+														<td class="date"><span class="title_txt">졸업년도</span></td>
+														<td class="department"><span class="title_txt">전공</span></td>
+														<td class="minor"><span class="title_txt">부전공</span></td>
+														<td class="etc"><span class="title_txt">기타</span></td>
+													</tr>
+													<tr class="dataRow" data-id="">
+														<td class="num"><span>1</span></td>
+														<td class="class"><span class="txt"></span></td>
+														<td class="school"><span class="txt"></span></td>
+														<td class="date"></td>
+														<td class="date"></td>
+														<td class="department"><span class="txt"></span></td>
+														<td class="minor"><span class="txt"></span></td>
+														<td class="etc"><span class="txt"></span></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="tab-pane fade" id="info14">
+											<h3 class="tab_title">가족</h3>
+											<table class="type_list_box">
+												<tbody>
+													<tr id="title">
+														<td class="num"><span class="title_txt">No</span></td>
+														<td class="name"><span class="title_txt"> 가족성명</span></td>
+														<td class="relation"><span class="title_txt">
+																가족관계</span></td>
+														<td class="sex"><span class="title_txt">성별</span></td>
+														<td class="date"><span class="title_txt">생년월일</span></td>
+														<td class="division"><span class="title_txt">학력</span></td>
+														<td class="jop"><span class="title_txt">직업</span></td>
+														<td class="etc"><span class="title_txt">기타</span></td>
+													</tr>
+													<tr class="dataRow" data-id="">
+														<td class="num"><span>1</span></td>
+														<td class="name"><span class="txt"></span></td>
+														<td class="relation"><span class="txt"></span></td>
+														<td class="sex"></td>
+														<td class="date"></td>
+														<td class="division"><span class="txt"></span></td>
+														<td class="jop"><span class="txt"></span></td>
+														<td class="etc"><span class="txt"></span></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+	$(function(){
+		fn_getFullTime();	 
+		fn_getTime();
+		setInterval(fn_getFullTime, 1000);
+		setInterval(fn_getTime, 1000);
+	});	
+		//현재 시각
+		var now = new Date();
+		
+		// 년/월/일/요일/시/분/초 구하기
+		var year = now.getFullYear();
+		var month = now.getMonth() + 1;
+		var date = now.getDate();
+		var date1 = year + "." + month + "." + date;
+		var dayInt = now.getDay();
+		
+	function fn_getFullTime() {
+		// 요일(숫자)을 요일(한글)로 바꾸기
+		var week = new Array("일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일");
+		var dayStr = week[dayInt]; // 일요일
+		var day = dayStr.substring(0, 1); // 일
+
+		// 시/분/초
+		var hour = now.getHours();
+		var min = now.getMinutes();
+		var sec = now.getSeconds();
+
+		if (hour < 10) {
+			hour = "0" + hour;
+		}
+		if (min < 10) {
+			min = "0" + min;
+		}
+		if (sec < 10) {
+			sec = "0" + sec;
+		}
+
+		var currentDay = year + "년 " + month + "월 " + date + "일 " + "("	+ day + ") ";
+
+		$(".Today").text(currentDay);
+	}
+
+	// 시/분/초만 구하기
+	function fn_getTime() {
+		var now = new Date();
+
+		// 시/분/초
+		var hour = now.getHours();
+		var min = now.getMinutes();
+		var sec = now.getSeconds();
+
+		if (hour < 10) {
+			hour = "0" + hour;
+		}
+		if (min < 10) {
+			min = "0" + min;
+		}
+		if (sec < 10) {
+			sec = "0" + sec;
+		}
+
+		var currentTime = hour + ":" + min + ":" + sec;
+		$("#sysdate").text(currentTime);
+	}
+	
+	//시/분/초만 구하기
+	var now = new Date();
+	
+	// 시/분/초
+	var hour = now.getHours();
+	var min = now.getMinutes();
+	var sec = now.getSeconds();
+
+	if (hour < 10) {
+		hour = "0" + hour;
+	}
+	if (min < 10) {
+		min = "0" + min;
+	}
+	if (sec < 10) {
+		sec = "0" + sec;
+	}
+
+	var currentTime = hour + ":" + min + ":" + sec;
+
+	//console.log(currentTime);
+
+	$("#today").click(function() {
+		$("#time").text(Time);
+	});
+
+	$("#btnStartWork").click(function() {
+		var now = new Date();
+
+		// 시/분/초
+		var hour = now.getHours();
+		var min = now.getMinutes();
+		var sec = now.getSeconds();
+
+		if (hour < 10) {
+			hour = "0" + hour;
+		}
+		if (min < 10) {
+			min = "0" + min;
+		}
+		if (sec < 10) {
+			sec = "0" + sec;
+		}
+
+		var currentTime = hour + ":" + min + ":" + sec;
+		var id = ${empVo.empno};
+		$.ajax({
+			url : "/ehr/insert",
+			type : 'POST',
+			data : {
+				"empNo" : "${empVo.empno}",
+				"tm3" : currentTime,
+				"rcordCode" : "D101"
+			},
+			success : function(data) {
+				$("#spWorkTime").text(currentTime);
+				//console.log(rcordCode);
+				$("#empNo").val(id);
+				document.getElementById('fm').submit(); 
+			}
+
+		});
+
+	});
+	$("#btnEndWork").click(function() {
+		var now = new Date();
+
+		// 시/분/초
+		var hour = now.getHours();
+		var min = now.getMinutes();
+		var sec = now.getSeconds();
+
+		if (hour < 10) {
+			hour = "0" + hour;
+		}
+		if (min < 10) {
+			min = "0" + min;
+		}
+		if (sec < 10) {
+			sec = "0" + sec;
+		}
+
+		var currentTime = hour + ":" + min + ":" + sec;
+		var id = ${empVo.empno};
+		$.ajax({
+			url : "/ehr/insert",
+			type : 'POST',
+			data : {
+				"empNo" : "${empVo.empno}",
+				"tm3" : currentTime,
+				"rcordCode" : "D102"
+			},
+            success : function(data){
+            	$("#spWorkTimeEnd").text(currentTime);
+            	$("#empNo").val(id);
+				document.getElementById('fm').submit();
+            }
+		});
+
+	});
+	
+	// 쿠키 설정
+	var _rolling_interval = 10;
+	$(document).ready(function(){
+	////////////////////////////////////////
+
+		function setCookie(cName, cValue, expiredays)
+		{
+			 var today = new Date();
+			 today.setDate( today.getDate() + expiredays );
+			 document.cookie = cName + "=" + escape( cValue ) + "; path=/; expires=" + today.toGMTString() + ";"
+		}
+		
+		function getCookie()
+		{
+			// userid 쿠키에서 id 값을 가져온다.
+			var cook = document.cookie + ";";
+			var key = 'hcn_total_dashbd';
+			var idx = cook.indexOf(key, 0);
+			var val = "";
+
+			if(idx != -1)
+			{
+				cook = cook.substring(idx, cook.length);
+				begin = cook.indexOf("=", 0) + 1;
+				end = cook.indexOf(";", begin);
+				val = unescape( cook.substring(begin, end) );
+			}
+
+			// 가져온 쿠키값이 있으면
+			if(val!= "")
+			{
+				$("#select").val( val );
+				_rolling_interval = val;
+			}else{
+				$("#select").val( _rolling_interval );
+			}
+		}
+		getCookie();
+
+
+		$("#select").change(function(e){
+			var _rolling_interval = $(this).val();
+			setCookie("hcn_total_dashbd", _rolling_interval, 7);
+
+			$("time").text( _rolling_interval );
+		});
+		
+		$("time").text( _rolling_interval );
+
+	////////////////////////////////////////
+
+	});
+</script>
+</html>

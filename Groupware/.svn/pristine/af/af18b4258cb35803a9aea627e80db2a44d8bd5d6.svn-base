@@ -1,0 +1,214 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.EA.mapper.EAMapper">
+
+	<select id="selectLine" parameterType="String" resultType="kr.or.ddit.EA.vo.LineVO">
+	SELECT
+	    sanctn_no
+	   ,ordr
+	   ,sanctner_empno
+	   ,sanc_code
+	   ,return_cn
+	   ,sanctn_tm
+	   ,tb_empl.nm
+	   ,A.nm ofcpsNm
+	   ,B.nm sancNm
+	FROM
+	    tb_sanctn_detail, tb_empl, Tb_Unity_Code A, Tb_Unity_Code B
+	where sanctn_no = #{sanctnNo}
+	and tb_empl.empno = tb_sanctn_detail.sanctner_empno
+	and A.code(+) = tb_empl.OFCPS_CODE
+	and B.code(+) = sanc_code
+	order by ordr asc
+	</select>
+
+	<select id="selectOne" parameterType="String" resultType="kr.or.ddit.EA.vo.DrftVO">
+		SELECT
+		   a.drft_no
+		   ,a.empno
+		   ,d.nm
+		   ,a.sanctn_no
+		   ,a.form_no
+		   ,E.Form_Nm
+		   ,a.drft_progrs_code
+		   ,f.nm drftProgrsNm
+		   ,a.scrty_grad_code
+		   ,a.writng_tm
+		   ,a.updt_tm
+		   ,a.updt_empno
+		   ,a.cn
+		   ,a.sj
+		   ,a.file_no
+		   ,a.dept_code
+		   ,b.nm deptNm
+		   ,a.co_dept_code
+		   ,c.nm coDeptNm
+		   ,a.complete_tm
+		   ,g.nm ofcpsNm
+		FROM
+		    tb_drft a, Tb_Unity_Code b, Tb_Unity_Code c, tb_empl d, tb_form e, Tb_Unity_Code f
+		    ,Tb_Unity_Code g
+		where b.Code = a.Dept_Code
+		and c.code = a.Co_Dept_Code
+		and a.empno = d.empno
+		and a.Form_No = e.Form_No
+		and a.Drft_Progrs_Code = f.code
+		and a.drft_no = #{drftNo}
+		and d.OFCPS_CODE = g.code
+	</select>
+
+	<select id="selectCount" parameterType="hashMap" resultType="int">
+		select count(drft_no)
+		from tb_drft, tb_empl, tb_unity_code a, tb_unity_code b
+		where tb_empl.empno = tb_drft.empno
+		and Tb_Drft.Dept_Code = a.code
+		and Tb_Drft.Co_Dept_Code = b.code
+		<choose>
+			<when test="selSearch=='' and selSearch.equals('')">
+				AND a.nm || b.nm || tb_empl.NM || tb_drft.SJ || tb_drft.CN LIKE '%' || #{keyword} || '%'
+			</when>
+			<otherwise>
+				<if test="selSearch!='' and selSearch.equals('nm')">
+				AND tb_empl.NM LIKE '%' || #{keyword} || '%'
+				</if>
+				<if test="selSearch!='' and selSearch.equals('sj')">
+				AND tb_drft.SJ LIKE '%' || #{keyword} || '%'
+				</if>
+				<if test="selSearch!='' and selSearch.equals('cn')">
+				AND tb_drft.CN LIKE '%' || #{keyword} || '%'
+				</if>
+				<if test="selSearch!='' and selSearch.equals('dept')">
+				AND a.nm LIKE '%' || #{keyword} || '%'
+				</if>
+				<if test="selSearch!='' and selSearch.equals('coDept')">
+				AND b.nm LIKE '%' || #{keyword} || '%'
+				</if>
+			</otherwise>
+		</choose>
+	</select>
+
+	<!-- 조건 있이 일부 기안서를 조회 -->
+	<select id="selectAll" resultType="kr.or.ddit.EA.vo.DrftVO">
+		SELECT R.* 
+		FROM
+			(SELECT
+				ROW_NUMBER() OVER(ORDER BY drft_no desc) RNUM
+			   ,a.drft_no
+			   ,a.empno
+			   ,d.nm
+			   ,a.sanctn_no
+			   ,a.form_no
+			   ,E.Form_Nm
+			   ,a.drft_progrs_code
+			   ,f.nm drftProgrsNm
+			   ,a.scrty_grad_code
+			   ,a.writng_tm
+			   ,a.updt_tm
+			   ,a.updt_empno
+			   ,a.cn
+			   ,a.sj
+			   ,a.file_no
+			   ,a.dept_code
+			   ,b.nm deptNm
+			   ,a.co_dept_code
+			   ,c.nm coDeptNm
+			   ,a.complete_tm
+			FROM
+			    tb_drft a, Tb_Unity_Code b, Tb_Unity_Code c, tb_empl d, tb_form e, Tb_Unity_Code f
+			where b.Code = a.Dept_Code
+			and c.code = a.Co_Dept_Code
+			and a.empno = d.empno
+			and a.Form_No = e.Form_No
+			and a.Drft_Progrs_Code = f.code
+			<choose>
+				<when test="selSearch=='' and selSearch.equals('')">
+					AND d.NM || a.SJ || a.CN LIKE '%' || #{keyword} || '%'
+				</when>
+				<otherwise>
+					<if test="selSearch!='' and selSearch.equals('nm')">
+					AND d.NM LIKE '%' || #{keyword} || '%'
+					</if>
+					<if test="selSearch!='' and selSearch.equals('sj')">
+					AND a.SJ LIKE '%' || #{keyword} || '%'
+					</if>
+					<if test="selSearch!='' and selSearch.equals('cn')">
+					AND a.CN LIKE '%' || #{keyword} || '%'
+					</if>
+					<if test="selSearch!='' and selSearch.equals('dept')">
+					AND b.nm LIKE '%' || #{keyword} || '%'
+					</if>
+					<if test="selSearch!='' and selSearch.equals('coDept')">
+					AND c.nm LIKE '%' || #{keyword} || '%'
+					</if>
+				</otherwise>
+			</choose>
+			ORDER BY drft_no desc) R
+			WHERE R.RNUM BETWEEN #{currentPage} * 12 - 11 AND #{currentPage} * 12
+			
+	</select>
+
+	<!-- 결재선을 추가하기 위해서 마지막 결재선 번호를 조회 -->
+	<select id="lastLineNo" resultType="String">
+		SELECT
+		    nvl(max(sanctn_no), 0) + 1 sanctn_no
+		FROM
+		    tb_sanctn_detail
+	</select>
+
+	<!-- 기안서 추가를 위해서 먼저 결재선을 추가 -->
+	<insert id="lineInsert" parameterType="empVo">
+		INSERT INTO tb_sanctn_detail (
+		    sanctn_no
+		   ,ordr
+		   ,sanctner_empno
+		   ,sanc_code
+		   ,return_cn
+		   ,sanctn_tm
+		) VALUES (
+		    #{lineNo}
+		   ,#{ordr}
+		   ,#{empno}
+		   ,null
+		   ,null
+		   ,null
+		)
+	</insert>
+	
+	<!-- 결재선 추가 -->
+	<insert id="drftInsert" parameterType="kr.or.ddit.EA.vo.DrftVO">
+		INSERT INTO tb_drft (
+		    drft_no
+		   ,empno
+		   ,sanctn_no
+		   ,form_no
+		   ,drft_progrs_code
+		   ,scrty_grad_code
+		   ,writng_tm
+		   ,updt_tm
+		   ,updt_empno
+		   ,cn
+		   ,sj
+		   ,file_no
+		   ,dept_code
+		   ,co_dept_code
+		) VALUES (
+		    (SELECT
+			    nvl(max(drft_no),0) + 1 drft_no
+			FROM
+			    tb_drft)
+		   ,#{empno}
+		   ,#{sanctnNo}
+		   ,#{formNo}
+		   ,'R103'
+		   ,null
+		   ,sysdate
+		   ,null
+		   ,null
+		   ,#{cn}
+		   ,#{sj}
+		   ,#{fileNo}
+		   ,#{deptCode}
+		   ,#{coDeptCode}
+		)
+	
+	</insert>
+</mapper>

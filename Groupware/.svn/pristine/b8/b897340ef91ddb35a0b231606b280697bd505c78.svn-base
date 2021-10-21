@@ -1,0 +1,68 @@
+package kr.or.ddit.todo.service.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import kr.or.ddit.todo.mapper.TodoMapper;
+import kr.or.ddit.todo.service.TodoService;
+import kr.or.ddit.todo.vo.TodoVO;
+
+@Service
+public class TodoServiceImpl implements TodoService{
+	
+	@Autowired
+	TodoMapper tm;
+
+	@Override
+	public List<TodoVO> boardAllList() {
+		return tm.boardAllList();
+	}
+
+	@Override
+	public List<TodoVO> boardCocnrAllList() {
+		return tm.boardCocnrAllList();
+	}
+	
+	// 보드 생성
+	@Override
+	public int createBoard(TodoVO todoVO) {
+		int result = tm.createBoard(todoVO);
+		// 보드 생성이 성공하면
+		if(result > 0) {
+			// 보드 공유자를 추가
+			for(int i=0; i<todoVO.getCocnrEmpnoArr().size(); i++) {
+				int cocnrEmpno = todoVO.getCocnrEmpnoArr().get(i);
+				todoVO.setCocnrEmpno(cocnrEmpno);
+				// System.out.println(todoVO.toString());
+				tm.addBoardCocnr(todoVO);
+			}
+		}
+		
+		return result;
+		
+	}
+	
+	// 보드 공유자 추가
+	@Override
+	public int addBoardCocnr(TodoVO todoVO) {
+		return tm.addBoardCocnr(todoVO);
+	}
+
+	@Override
+	public int updateBkmk(Map<String, Object> map) {
+		return tm.updateBkmk(map);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}

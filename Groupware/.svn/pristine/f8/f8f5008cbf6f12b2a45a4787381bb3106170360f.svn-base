@@ -1,0 +1,122 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.ehr.mapper.EhrMapper">
+	<!-- 
+	collection : parameterType으로 넘어온 list
+	item : collection을 사용할 변수
+	seperator : 반복 되는 요소에 추가할 문자열
+	 -->
+	<insert id="insert" parameterType="ehrVo">
+      INSERT INTO TB_WORK(EMPNO, TM, RCORD_CODE)
+      VALUES(
+      #{empNo}
+      ,(select To_date((TO_CHAR(SYSDATE, 'YYYY-MM-DD') || #{tm3}), 'YYYY-MM-DD HH24:MI:SS') TODAY0
+		from dual)
+      ,#{rcordCode}
+      )
+	</insert>
+
+	<insert id="total" parameterType="ehrVo">
+      INSERT INTO TB_WORK(EMPNO,TM, RCORD_CODE, WORK_ACCMLT_TM)
+      VALUES(
+	      #{empNo}
+	      ,TO_DATE(TO_CHAR(SYSDATE)|| '23:59:59', 'YYYY-MM-DD HH24:MI:SS')
+	      ,'D103'
+	      ,FN_GET_ELAPSEDMSEC(#{empNo})
+      )
+	</insert>
+	
+	<select id="select" parameterType="ehrVo" resultType="ehrVo">
+	SELECT
+		empno emp_no,
+		tm,
+		rcord_code,
+		work_accmlt_tm
+	FROM
+		tb_work
+	WHERE TM > TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD'), 'YYYY-MM-DD HH24:MI:SS')
+	AND empno = #{empNo}
+	order by tm asc 
+	</select>
+
+	<select id="selectList" parameterType="ehrVo" resultType="ehrVo">
+	SELECT
+		empno emp_no,
+		tm,
+		rcord_code,
+		work_accmlt_tm
+	FROM
+		tb_work
+	WHERE empno = #{empNo}
+	AND RCORD_CODE = 'D101'
+	order by tm asc 
+	</select>
+	
+	<select id="selectList2" parameterType="ehrVo" resultType="ehrVo">
+	SELECT
+		empno emp_no,
+		tm,
+		rcord_code,
+		work_accmlt_tm
+	FROM
+		tb_work
+	WHERE empno = #{empNo}
+	AND RCORD_CODE = 'D102'
+	order by tm asc 
+	</select>
+
+	<select id="selectList3" parameterType="ehrVo" resultType="ehrVo">
+	SELECT
+		empno emp_no,
+		tm,
+		rcord_code,
+		WORK_ACCMLT_TM
+	FROM
+		tb_work
+	WHERE empno = #{empNo}
+	AND RCORD_CODE = 'D103'
+	AND WORK_ACCMLT_TM > 0
+	order by tm asc 
+	</select>
+
+	<select id="selectList4" parameterType="ehrVo" resultType="ehrVo">
+	<![CDATA[
+	select NVL(TRUNC(sum(work_accmlt_tm)),0) tmh,
+	NVL(TRUNC((sum(work_accmlt_tm) - TRUNC(sum(work_accmlt_tm)))*60),0) tmm
+	from
+	(SELECT
+		to_char(a.tm, 'yyyy-mm-dd') as days,
+		a.empno,
+		to_char(a.tm, 'HH24:MI') st_time,
+	(SELECT
+		to_char(b.tm, 'HH24:MI') et_time
+		FROM
+		tb_work b
+		WHERE 1=1
+		AND b.empno = a.empno
+		AND b.RCORD_CODE = 'D102'
+		and to_char(a.tm, 'yyyy-mm-dd') = to_char(b.tm, 'yyyy-mm-dd') ) as et_time
+		,
+	TRUNC((TO_DATE(
+	(SELECT
+		to_char(b.tm, 'HH24:MI') et_time
+		FROM
+		tb_work b
+		WHERE 1=1
+		AND b.empno = a.empno
+		AND b.RCORD_CODE = 'D102'
+		and to_char(a.tm, 'yyyy-mm-dd') = to_char(b.tm, 'yyyy-mm-dd') ),
+		'HH24:MI') - TO_DATE(to_char(a.tm, 'HH24:MI'), 'HH24:MI')) * 24, 2) as
+		work_accmlt_tm,
+	
+		a.rcord_code
+	
+		FROM
+		tb_work a
+		WHERE 1=1
+		AND empno = #{empNo}
+		AND a.RCORD_CODE = 'D101'
+		AND TO_CHAR(TRUNC(SYSDATE,'D')+1,'YYYY/MM/DD') < TM
+		AND TM <= TO_CHAR(TRUNC(SYSDATE,'D')+7,'YYYY/MM/DD'))
+	]]>
+	</select>
+</mapper>

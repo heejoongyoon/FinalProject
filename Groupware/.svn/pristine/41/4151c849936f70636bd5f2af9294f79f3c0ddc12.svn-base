@@ -1,0 +1,129 @@
+package kr.or.ddit.todo.vo;
+
+import java.util.Date;
+import java.util.List;
+
+import kr.or.ddit.file.vo.FileVO;
+
+public class TodoVO extends FileVO{
+	private int boardNo;					// 보드 번호
+	private int esterEmpno;					// 보드생성자 사번
+	private String boardNm;					// 보드 이름
+	private List<Integer> cocnrEmpnoArr;	// 보드공유자 사번 배열
+	private int cocnrEmpno;					// 보드공유자 사번
+	private String bkmk;					// 즐겨찾기 여부
+	private int cardMenuNo;					// 카드 메뉴 번호
+	private int cardNo;						//카드 번호
+	private int wrterEmpno;					// 카드생성자 사번
+	private String cardCn;					// 카드 내용
+	private Date writngTm;					// 작성 시각
+	private int updtEmpno;					// 수정자 사번
+	private Date updtTm;					// 수정 시각
+	private int answerNo;					// 카드 댓글 번호
+	private String cn;						// 카드 댓글 내용
+	
+	public int getBoardNo() {
+		return boardNo;
+	}
+	public void setBoardNo(int boardNo) {
+		this.boardNo = boardNo;
+	}
+	public int getEsterEmpno() {
+		return esterEmpno;
+	}
+	public void setEsterEmpno(int esterEmpno) {
+		this.esterEmpno = esterEmpno;
+	}
+	public String getBoardNm() {
+		return boardNm;
+	}
+	public void setBoardNm(String boardNm) {
+		this.boardNm = boardNm;
+	}
+	public List<Integer> getCocnrEmpnoArr() {
+		return cocnrEmpnoArr;
+	}
+	public void setCocnrEmpnoArr(List<Integer> cocnrEmpnoArr) {
+		this.cocnrEmpnoArr = cocnrEmpnoArr;
+	}
+	public int getCocnrEmpno() {
+		return cocnrEmpno;
+	}
+	public void setCocnrEmpno(int cocnrEmpno) {
+		this.cocnrEmpno = cocnrEmpno;
+	}
+	public String getBkmk() {
+		return bkmk;
+	}
+	public void setBkmk(String bkmk) {
+		this.bkmk = bkmk;
+	}
+	public int getCardMenuNo() {
+		return cardMenuNo;
+	}
+	public void setCardMenuNo(int cardMenuNo) {
+		this.cardMenuNo = cardMenuNo;
+	}
+	public int getCardNo() {
+		return cardNo;
+	}
+	public void setCardNo(int cardNo) {
+		this.cardNo = cardNo;
+	}
+	public int getWrterEmpno() {
+		return wrterEmpno;
+	}
+	public void setWrterEmpno(int wrterEmpno) {
+		this.wrterEmpno = wrterEmpno;
+	}
+	public String getCardCn() {
+		return cardCn;
+	}
+	public void setCardCn(String cardCn) {
+		this.cardCn = cardCn;
+	}
+	public Date getWritngTm() {
+		return writngTm;
+	}
+	public void setWritngTm(Date writngTm) {
+		this.writngTm = writngTm;
+	}
+	public int getUpdtEmpno() {
+		return updtEmpno;
+	}
+	public void setUpdtEmpno(int updtEmpno) {
+		this.updtEmpno = updtEmpno;
+	}
+	public Date getUpdtTm() {
+		return updtTm;
+	}
+	public void setUpdtTm(Date updtTm) {
+		this.updtTm = updtTm;
+	}
+	public int getAnswerNo() {
+		return answerNo;
+	}
+	public void setAnswerNo(int answerNo) {
+		this.answerNo = answerNo;
+	}
+	public String getCn() {
+		return cn;
+	}
+	public void setCn(String cn) {
+		this.cn = cn;
+	}
+	
+	@Override
+	public String toString() {
+		return "TodoVO [boardNo=" + boardNo + ", esterEmpno=" + esterEmpno + ", boardNm=" + boardNm + ", cocnrEmpnoArr="
+				+ cocnrEmpnoArr + ", cocnrEmpno=" + cocnrEmpno + ", bkmk=" + bkmk + ", cardMenuNo=" + cardMenuNo
+				+ ", cardNo=" + cardNo + ", wrterEmpno=" + wrterEmpno + ", cardCn=" + cardCn + ", writngTm=" + writngTm
+				+ ", updtEmpno=" + updtEmpno + ", updtTm=" + updtTm + ", answerNo=" + answerNo + ", cn=" + cn + "]";
+	}
+	
+	
+	
+	
+	
+	
+}

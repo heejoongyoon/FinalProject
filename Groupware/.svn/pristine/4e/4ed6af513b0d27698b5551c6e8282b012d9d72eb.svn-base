@@ -1,0 +1,14 @@
+package kr.or.ddit.EA.service;
+
+import java.util.List;
+
+import kr.or.ddit.EA.vo.DrftVO;
+import kr.or.ddit.login.vo.EmpVOList;
+
+public interface EAService {
+
+	int insert(EmpVOList empVoList, DrftVO drftVo);
+
+	List<DrftVO> selectAll();
+
+}

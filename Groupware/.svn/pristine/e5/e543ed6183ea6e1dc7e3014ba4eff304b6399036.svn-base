@@ -1,0 +1,230 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!-- 공통 css -->
+<style>
+   .left-menu-list {position: absolute; border-right: 1px solid #dee2e6; height: 100%; width: 260px; float: left;}
+   .lefr-menu-list-content{margin-left: 260px; padding-left: 10px; padding-right: 10px; display: flex;}
+   .left-menu-list a {color : black;}
+   .left-menu-list a:hover {color: black;}
+   
+   .menu-name {padding: 20px 20px 10px 20px;}
+   .menu-create {padding: 0px 20px 20px 20px;}
+   .menu-list {padding: 0px 20px 20px 20px;}
+   #btCreateBoard {width: 100%; height: 60px; border-color: black; background-color: white;}
+   #btCreateBoard:hover {box-shadow: 0px 5px 15px #dddddd;}
+   #btCreateBoard > span {font-size: 1rem;}
+   
+   .menu-list .menu-list-ul {list-style: none; padding-left: 0px; margin-bottom: 0px;}
+   .menu-list li {padding-left: 40px; margin-top: 3px;}
+   .menu-list li:hover {background-color: #f7f8f9;}
+   .menu-list span {font-size: 0.9rem;}
+   
+   .card{
+      margin-right: 10px; 
+      width: 500px;
+       height: 235px;
+   }
+   
+   .fontsz{font-size: 1.5em;}   
+   .float-right{padding-top: 5px;}
+   
+   .statusIng {
+       border: 1px solid #ff616b;
+       background-color: #ff616b;
+       color: white;
+       font-size: 0.7rem;
+       padding: 3px;
+       font-weight: bold;
+       border-radius: 3px;
+    }
+    
+    .statusEnd {
+       border: 1px solid #c2c4c8;
+       background-color: #c2c4c8;
+       color: white;
+       font-size: 0.7rem;
+       padding: 3px;
+       font-weight: bold;
+       border-radius: 3px;
+    }
+</style>
+<script type="text/javascript">
+   // ' > 메뉴 ' 클릭 시, 아이콘 변경 및 ul 토글
+   $(function(){
+      $(".toggle-menu-list").click(function(e){
+         e.preventDefault();
+         $(this).find("i").toggleClass("fas fa-angle-down mr-2 fas fa-angle-right mr-2");
+         $(this).next().slideToggle();
+      });
+      
+   });
+</script>
+<div id="body">
+   <div class="left-menu">
+      <div class="left-menu-list">
+         <div class="menu-name"><h2><a href="/bogo/home">보고</a></h2></div>
+         <div class="menu-create">
+            <button id="btCreateBoard" type="button" class="btn btn-default" ><a href="/bogo/insert">+보고서 추가</a></button>
+         </div>
+         <div class="menu-list">
+            <a href="#" class="toggle-menu-list"><i class="fas fa-angle-down mr-2"></i><strong>부서별 보고서</strong></a>
+            <ul class="menu-list-ul">
+               <li>
+                  <a href="#"><span>지출 예정 보고</span></a>
+               </li>
+               <li>
+                  <a href="#"><span>중지된 보고서</span></a>
+               </li>
+               <li>
+                  <a href="#"><span>경영 지원 본부</span></a>
+               </li>
+            </ul>
+         </div>
+         <div class="menu-list">
+            <a href="#" class="toggle-menu-list"><i class="fas fa-angle-down mr-2"></i><strong>나의 커뮤니티</strong></a>
+            <ul class="menu-list-ul">
+               <li>
+                  <a href="#"><span>상세메뉴</span></a>
+               </li>
+               <li>
+                  <a href="#"><span>상세메뉴</span></a>
+               </li>
+               <li>
+                  <a href="#"><span>상세메뉴</span></a>
+               </li>
+               <li>
+                  <a href="#"><span>상세메뉴</span></a>
+               </li>
+            </ul>
+         </div>
+      </div>
+   </div>
+   <div class="right-menu" >
+      <div class="lefr-menu-list-content">
+            <div class="menu-name"><h2>보고 홈</h2></div>
+      </div>
+      <div class="lefr-menu-list-content">
+         <div class="card">
+            <div class="card-header">
+               <div><b class="fontsz">팀 수행계획서</b> <a class="float-right">2021-09-07(화)</a></div>
+               <i class="fas fa-users"></i> 김소희 외 4 <span class="float-right statusIng">모집중</span>
+            </div>
+            
+            <div class="card-body">
+               <div class="cen"><h6 class="card-title">부서 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 다우그룹</h6> <span class="float-right"></span></div>
+               <p class="card-text">보고자 &nbsp; &nbsp; &nbsp;  0명 (미보고자 3명)</p>
+               <a href="#" class="btn btn-primary">보고하기</a>
+            </div>
+         </div>
+         <div class="card">
+            <div class="card-header">
+               <div><b class="fontsz">요구사항 정의서</b> <a class="float-right">2021-09-07(화)</a></div>
+               <i class="fas fa-users"></i> 이영민 외 4 <span class="float-right statusIng">모집중</span>
+            </div>
+            <div class="card-body">
+               <h6 class="card-title">자바 기초부터 다시 공부해보자</h6>
+               <p class="card-text">매주 수요일 저녁 7시 회사 앞 투썸 플레이스에서 자바 공부해봐요</p>
+               <a href="#" class="btn btn-primary">보고하기</a>
+            </div>
+         </div>
+         <div class="card">
+            <div class="card-header">
+               <div><b class="fontsz">단위업무 정의서</b> <a class="float-right">2021-09-07(화)</a></div>
+               <i class="fas fa-users"></i> 이영우 외 4 <span class="float-right statusIng">모집중</span>
+            </div>
+            <div class="card-body">
+               <h6 class="card-title">Special title treatment</h6>
+               <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+               <a href="#" class="btn btn-primary">보고하기</a>
+            </div>
+         </div>
+      </div>
+      <div class="lefr-menu-list-content">
+         <div class="card">
+            <div class="card-header">
+               <div><b class="fontsz">용어 사전</b> <a class="float-right">2021-09-07(화)</a></div>
+               <i class="fas fa-users"></i> 이승구 외 4 <span class="float-right statusIng">모집중</span>
+            </div>
+            <div class="card-body">
+               <h6 class="card-title">Special title treatment</h6>
+               <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+               <a href="#" class="btn btn-primary">보고하기</a>
+            </div>
+         </div>
+         <div class="card">
+            <div class="card-header">
+               <div><b class="fontsz">화면 정의서</b> <a class="float-right">2021-09-07(화)</a></div>
+               <i class="fas fa-users"></i> 윤희중 외 4 <span class="float-right statusEnd">모집완료</span>
+            </div>
+            <div class="card-body">
+               <h6 class="card-title">Special title treatment</h6>
+               <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+               <a href="#" class="btn btn-primary">보고하기</a>
+            </div>
+         </div>
+         <div class="card">
+            <div class="card-header">
+               <h5 class="m-0">유스케이스 다이어그램</h5>
+            </div>
+            <div class="card-body">
+               <h6 class="card-title">Special title treatment</h6>
+               <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+               <a href="#" class="btn btn-primary">보고하기</a>
+            </div>
+         </div>
+      </div>
+      <div class="lefr-menu-list-content">
+         <div class="card">
+            <div class="card-header">
+               <h5 class="m-0">프로세스 정의서</h5>
+            </div>
+            <div class="card-body">
+               <h6 class="card-title">Special title treatment</h6>
+               <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+               <a href="#" class="btn btn-primary">보고하기</a>
+            </div>
+         </div>
+         <div class="card">
+            <div class="card-header">
+               <h5 class="m-0">물리 ERD</h5>
+            </div>
+            <div class="card-body">
+               <h6 class="card-title">Special title treatment</h6>
+               <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+               <a href="#" class="btn btn-primary">보고하기</a>
+            </div>
+         </div>
+         <div class="card">
+            <div class="card-header">
+               <h5 class="m-0">논리 ERD</h5>
+            </div>
+            <div class="card-body">
+               <h6 class="card-title">Special title treatment</h6>
+               <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+               <a href="#" class="btn btn-primary">보고하기</a>
+            </div>
+         </div>
+      </div>
+   </div><!-- 오른쪽 네비 -->
+</div>
+  
+      <div class="lefr-menu-list-content">
+            <div class="menu-name"><h2>최근 생성된 보고서</h2>
+          <br>
+            <div class="dataTables_wrapper" id="recent_list">
+                                        <!-- 테이블 -->      
+                                        <br>  
+                    <div id="recentList_wrapper" class="dataTables_wrapper" role="grid"><div id="recentList_processing" class="dataTables_processing" style="visibility: hidden;">Loading...</div><table class="type_normal tb_lately_report dataTable" id="recentList" style="width: 100%; margin-bottom: 0px;">    
+                        <colgroup>
+                            <col>
+                            <col>
+                            <col>
+                            <col>
+                        </colgroup>
+                        <thead>
+                            <tr role="row"><th class="date sorting_disabled" role="columnheader" rowspan="1" colspan="1" aria-label="보고일" style="width: 180px;"><span class="title_sort">보고일</span></th><th class="part sorting_disabled" role="columnheader" rowspan="1" colspan="1" aria-label="부서" style="width: 325px;"><span class="title_sort">부서</span></th><th class="folder_type sorting_disabled" role="columnheader" rowspan="1" colspan="1" aria-label="보고서" style="width: 371px;"><span class="title_sort">보고서</span></th><th class="subject sorting_disabled" role="columnheader" rowspan="1" colspan="1" aria-label="제목" style="width: 466px;"><span class="title_sort">제목</span></th><th class="name sorting_disabled" role="columnheader" rowspan="1" colspan="1" aria-label="보고자" style="width: 120px;"><span class="title_sort">보고자</span></th></tr>
+                        </thead>
+                    <tbody role="alert" aria-live="polite" aria-relevant="all"><tr class="odd"><td class="date sorting_1">2021-09-09(목) 10:12</td><td class="part">다우그룹</td><td class="folder_type"><span data-id="228" style="cursor: pointer;"> TEST</span></td><td class="subject"><span class="detail" data-id="9416" data-series-id="1800" data-type="PERIODIC" style="cursor: pointer;"> 제 5회차 TEST</span></td><td class="name">김상후 대표이사</td></tr><tr class="even"><td class="date sorting_1">2021-09-02(목) 11:57</td><td class="part">경영지원본부</td><td class="folder_type"><span data-id="249" style="cursor: pointer;"> 업무처리보고서</span></td><td class="subject"><span class="detail" data-id="9367" data-series-id="1792" data-type="PERIODIC" style="cursor: pointer;"> 제 1회차 업무처리보고서</span></td><td class="name">김상후 대표이사</td></tr><tr class="odd"><td class="date sorting_1">2021-09-01(수) 09:33</td><td class="part">다우그룹</td><td class="folder_type"><span data-id="228" style="cursor: pointer;"> TEST</span></td><td class="subject"><span class="detail" data-id="8931" data-series-id="1710" data-type="PERIODIC" style="cursor: pointer;"> 제 2회차 TEST</span></td><td class="name">김상후 대표이사</td></tr><tr class="even"><td class="date sorting_1">2021-09-01(수) 09:32</td><td class="part">다우그룹</td><td class="folder_type"><span data-id="228" style="cursor: pointer;"> TEST</span></td><td class="subject"><span class="detail" data-id="9256" data-series-id="1767" data-type="PERIODIC" style="cursor: pointer;"> 제 4회차 TEST</span></td><td class="name">김상후 대표이사</td></tr><tr class="odd"><td class="date sorting_1">2021-08-31(화) 13:43</td><td class="part">다우그룹</td><td class="folder_type"><span data-id="226" style="cursor: pointer;"> 지출예정보고</span></td><td class="subject"><span class="detail" data-id="9351" data-folder-id="226" data-type="OCCASIONAL" style="cursor: pointer;"> ㅅ교ㅗ</span></td><td class="name">김상후 대표이사</td></tr><tr class="even"><td class="date sorting_1">2021-08-31(화) 13:36</td><td class="part">다우그룹</td><td class="folder_type"><span data-id="243" style="cursor: pointer;"> ㄴㅇㄴㅇ</span></td><td class="subject"><span class="detail" data-id="9238" data-series-id="1736" data-type="PERIODIC" style="cursor: pointer;"> 제 1회차 ㄴㅇㄴㅇ</span></td><td class="name">김상후 대표이사</td></tr><tr class="odd"><td class="date sorting_1">2021-08-31(화) 12:39</td><td class="part">다우그룹</td><td class="folder_type"><span data-id="229" style="cursor: pointer;"> TEST</span></td><td class="subject"><span class="detail" data-id="9278" data-series-id="1772" data-type="PERIODIC" style="cursor: pointer;"> 제 4회차 TEST</span></td><td class="name">김상후 대표이사</td></tr></tbody></table></div>
+                    <!-- //테이블 -->                    </div>
+      </div>
+     </div>

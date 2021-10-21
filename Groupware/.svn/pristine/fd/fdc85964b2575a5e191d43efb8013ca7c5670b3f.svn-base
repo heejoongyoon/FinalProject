@@ -1,0 +1,19 @@
+package kr.or.ddit.community.mapper;
+
+import java.util.List;
+
+import kr.or.ddit.community.vo.ComJoinVO;
+import kr.or.ddit.community.vo.CommuVO;
+
+public interface CommuMapper {
+	// 커뮤니티 작성
+	public int comInsert(CommuVO commuVo);
+	// 커뮤니티  목록
+	public List<CommuVO> comList();
+	// 커뮤니티 모달 조회
+	public CommuVO comModal(int cmmntyNo);
+	// 나의 커뮤니티 조회
+	public List<CommuVO> comMy(int estblEmpno);
+	// 커뮤니티 가입
+	public int comJoin (ComJoinVO comJoinVo);
+}

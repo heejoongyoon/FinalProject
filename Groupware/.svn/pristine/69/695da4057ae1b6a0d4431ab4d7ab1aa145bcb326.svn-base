@@ -1,0 +1,18 @@
+package kr.or.ddit.EA.mapper;
+
+import java.util.List;
+
+import kr.or.ddit.EA.vo.DrftVO;
+import kr.or.ddit.login.vo.EmpVO;
+
+public interface EAMapper {
+
+	void lineInsert(EmpVO empVo);
+
+	void drftInsert(DrftVO drftVo);
+
+	String lastLineNo();
+
+	List<DrftVO> selectAll();
+
+}

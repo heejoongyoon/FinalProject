@@ -1,0 +1,39 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.calendar.mapper.CalendarMapper">
+	<!-- 모든 일정 목록 가져오기 -->
+	<select id="selectScheduleList" resultType="calendarVO">
+		SELECT
+			SCHDUL_NO AS schdulNo
+			, EMPNO AS empno
+			, TO_CHAR(BEGIN_TM, 'YYYY-MM-dd HH24:MI') AS beginTm
+			, TO_CHAR(END_TM, 'YYYY-MM-dd HH24:MI') AS endTm
+			, OTHBC_AT AS othbcAt
+			, SJ AS sj
+			, CN AS cn
+			, COLOR AS color
+			, CATEGORY AS category
+		FROM
+			TB_CLDR
+	</select>
+	
+	<!-- 일정 수정 -->
+	<update id="editSchedule" parameterType="calendarVO">
+		UPDATE
+			TB_CLDR
+		SET
+			BEGIN_TM = TO_DATE(#{beginTm}, 'YYYY-MM-dd HH24:MI')
+			, END_TM = TO_DATE(#{endTm}, 'YYYY-MM-dd HH24:MI')
+			, OTHBC_AT = #{othbcAt}
+			, SJ = #{sj}
+			, CN = #{cn}
+			, COLOR = #{color}
+			, CATEGORY = #{category}
+		WHERE
+			SCHDUL_NO = #{schdulNo}
+	</update>
+	
+	<delete id="deleteSchedule" parameterType="int">
+		DELETE FROM TB_CLDR
+		WHERE SCHDUL_NO = #{schdulNo}
+	</delete>
+</mapper>

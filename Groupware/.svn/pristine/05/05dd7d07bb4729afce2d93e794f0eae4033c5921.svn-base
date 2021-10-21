@@ -1,0 +1,47 @@
+package kr.or.ddit.community.vo;
+
+public class ComJoinVO {
+	private int cmmntyNo;		// 커뮤니티 번호
+	private int sbscrberEmpno;	// 가입자 사번
+	private int approveEmpno;	// 개설자 사번
+	private String approveTm;	// 가입 시각
+	private String approveAt;	// 승인 여부
+	
+	@Override
+	public String toString() {
+		return "ComJoinVO [cmmntyNo=" + cmmntyNo + ", sbscrberEmpno=" + sbscrberEmpno + ", approveEmpno=" + approveEmpno
+				+ ", approveTm=" + approveTm + ", approveAt=" + approveAt + "]";
+	}
+	
+	public int getCmmntyNo() {
+		return cmmntyNo;
+	}
+	public void setCmmntyNo(int cmmntyNo) {
+		this.cmmntyNo = cmmntyNo;
+	}
+	public int getSbscrberEmpno() {
+		return sbscrberEmpno;
+	}
+	public void setSbscrberEmpno(int sbscrberEmpno) {
+		this.sbscrberEmpno = sbscrberEmpno;
+	}
+	public int getApproveEmpno() {
+		return approveEmpno;
+	}
+	public void setApproveEmpno(int approveEmpno) {
+		this.approveEmpno = approveEmpno;
+	}
+	public String getApproveTm() {
+		return approveTm;
+	}
+	public void setApproveTm(String approveTm) {
+		this.approveTm = approveTm;
+	}
+	public String getApproveAt() {
+		return approveAt;
+	}
+	public void setApproveAt(String approveAt) {
+		this.approveAt = approveAt;
+	}
+	
+}

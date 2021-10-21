@@ -1,0 +1,5 @@
+package kr.or.ddit.bogo.service.impl;
+
+public class BogoServiceImpl {
+
+}

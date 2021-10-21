@@ -1,0 +1,10 @@
+/* 우편 번호 검색 (다음 cdn) */
+function openHomeSearch(){
+	new daum.Postcode({
+		oncomplete : function(data){
+			$('[name=zipCode]').val(data.zonecode);
+			$('[name=addr1]').val(data.address);
+			$('[name=addr2]').val(data.buildingName);
+		}
+	}).open();
+}

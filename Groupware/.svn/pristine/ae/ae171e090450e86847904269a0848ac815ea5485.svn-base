@@ -1,0 +1,90 @@
+package kr.or.ddit.community.vo;
+
+public class ComBBVO {
+	private int cmmntyNo;		// 커뮤니티 번호
+	private int bbsNo;      	// 게시판 번호
+	private int bbsctt_no;  	// 게시글 번호
+	private int wrter_empno;	// 글쓴이
+	private String sj;      	// 제목
+	private String cn;      	// 내용
+	private int file_no;    	// 파일번호
+	private int rdcnt;      	// 조회 수
+	private String writng_tm;   // 작성 시각
+	private int updt_empno;  	// 수정자 사번
+	private String updt_tm;     // 수정 시각
+	
+	@Override
+	public String toString() {
+		return "ComBBVO [cmmntyNo=" + cmmntyNo + ", bbsNo=" + bbsNo + ", bbsctt_no=" + bbsctt_no + ", wrter_empno="
+				+ wrter_empno + ", sj=" + sj + ", cn=" + cn + ", file_no=" + file_no + ", rdcnt=" + rdcnt
+				+ ", writng_tm=" + writng_tm + ", updt_empno=" + updt_empno + ", updt_tm=" + updt_tm + "]";
+	}
+	public int getCmmntyNo() {
+		return cmmntyNo;
+	}
+	public void setCmmntyNo(int cmmntyNo) {
+		this.cmmntyNo = cmmntyNo;
+	}
+	public int getBbsNo() {
+		return bbsNo;
+	}
+	public void setBbsNo(int bbsNo) {
+		this.bbsNo = bbsNo;
+	}
+	public int getBbsctt_no() {
+		return bbsctt_no;
+	}
+	public void setBbsctt_no(int bbsctt_no) {
+		this.bbsctt_no = bbsctt_no;
+	}
+	public int getWrter_empno() {
+		return wrter_empno;
+	}
+	public void setWrter_empno(int wrter_empno) {
+		this.wrter_empno = wrter_empno;
+	}
+	public String getSj() {
+		return sj;
+	}
+	public void setSj(String sj) {
+		this.sj = sj;
+	}
+	public String getCn() {
+		return cn;
+	}
+	public void setCn(String cn) {
+		this.cn = cn;
+	}
+	public int getFile_no() {
+		return file_no;
+	}
+	public void setFile_no(int file_no) {
+		this.file_no = file_no;
+	}
+	public int getRdcnt() {
+		return rdcnt;
+	}
+	public void setRdcnt(int rdcnt) {
+		this.rdcnt = rdcnt;
+	}
+	public String getWritng_tm() {
+		return writng_tm;
+	}
+	public void setWritng_tm(String writng_tm) {
+		this.writng_tm = writng_tm;
+	}
+	public int getUpdt_empno() {
+		return updt_empno;
+	}
+	public void setUpdt_empno(int updt_empno) {
+		this.updt_empno = updt_empno;
+	}
+	public String getUpdt_tm() {
+		return updt_tm;
+	}
+	public void setUpdt_tm(String updt_tm) {
+		this.updt_tm = updt_tm;
+	}
+	
+	
+}

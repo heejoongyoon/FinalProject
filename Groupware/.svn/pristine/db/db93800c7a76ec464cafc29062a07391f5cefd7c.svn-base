@@ -1,0 +1,47 @@
+package kr.or.ddit.community.service;
+
+import java.util.List;
+
+import kr.or.ddit.community.vo.ComBBVO;
+import kr.or.ddit.community.vo.ComBoardVO;
+import kr.or.ddit.community.vo.ComJoinVO;
+import kr.or.ddit.community.vo.CommuVO;
+
+public interface CommuService {
+	// 커뮤니티 만들기
+	public int comInsert(CommuVO commuVo) throws Exception;
+	// 공지사항 만들기
+	public int comNoticeB(int cmmntyNo) throws Exception;
+	// 활동게시판 만들기
+	public int comActiveB(int cmmntyNo) throws Exception;
+	// 커뮤니티  목록
+	public List<CommuVO> comList() throws Exception;
+	// 커뮤니티 모달 조회
+	public CommuVO comModal(int cmmntyNo) throws Exception;
+	// 나의 커뮤니티 조회
+	public List<CommuVO> comMy(int empno) throws Exception;
+	// 커뮤니티 가입
+	public int comJoin (ComJoinVO comJoinVo) throws Exception;
+	// 가입한 커뮤니티(가입대기)
+	public List<ComJoinVO> comStand (int sbscrberEmpno) throws Exception;
+	// 가입한 커뮤니티(가입승인)
+	public List<ComJoinVO> comAccept (int sbscrberEmpno) throws Exception;
+	// 가입한 회원 리스트 (승인 / 취소)
+	public List<ComJoinVO> comAllMem (int sbscrberEmpno) throws Exception;
+	// 가입한 회원 변경
+	public int comAtUpdate (ComJoinVO comJoinVo) throws Exception;
+	// 가입한 회원 취소
+	public int comAtCancel (ComJoinVO comJoinVo) throws Exception;
+	// 해당 커뮤니티 상세 정보
+	public CommuVO comDetail(int cmmntyNo) throws Exception;
+	// 해당 커뮤니티 회원 리스트
+	public List<ComJoinVO> comMemList(int cmmntyNo) throws Exception;
+	// 해당 커뮤니티 게시판 리스트
+	public List<ComBoardVO> comBoard(int cmmntyNo) throws Exception;
+	// 해당 커뮤니티 게시물 조회리스트
+	public List<ComBBVO> comBBT(ComBBVO comBBVO) throws Exception;
+	// 해당 커뮤니티 공지게시판 최신게시글 5개
+	public List<ComBBVO> comNewNotice(int cmmntyNo) throws Exception;
+	// 해당 커뮤니티 활동게시판 최신게시글 3개
+	public List<ComBBVO> comNewActive(ComBBVO comBBVO) throws Exception;
+}

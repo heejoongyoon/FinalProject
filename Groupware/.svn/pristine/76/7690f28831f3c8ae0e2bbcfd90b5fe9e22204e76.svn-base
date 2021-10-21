@@ -1,0 +1,60 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.todo.mapper.TodoMapper">
+	<!-- 보드 조회 -->
+	<select id="boardAllList" resultType="todoVO">
+		SELECT BOARD_NO AS boardNo
+			, ESTER_EMPNO AS esterEmpno
+			, BOARD_NM AS boardNm
+			, BKMK AS bkmk
+		FROM TB_TODO_BOARD
+	</select>
+	
+	<!-- 보드 공유자 조회-->
+	<select id="boardCocnrAllList" resultType="todoVO">
+		SELECT A.BOARD_NO AS boardNo
+				, A.COCNR_EMPNO AS cocnrEmpno
+				, C.FILE_COURS AS fileCours
+				, C.FILE_NM AS fileNm
+		FROM TB_BOARD_COCNR A
+			, TB_EMPL B
+			, TB_FILE C
+		WHERE A.COCNR_EMPNO = B.EMPNO 
+		AND B.FILE_NO = C.FILE_NO
+	</select>
+	
+	<!-- 보드 생성 -->
+	<insert id="createBoard" parameterType="todoVO">
+		<selectKey order="BEFORE" keyProperty="boardNo" resultType="int">
+			SELECT NVL(MAX(BOARD_NO),0) + 1 FROM TB_TODO_BOARD 
+		</selectKey>
+		INSERT INTO
+			TB_TODO_BOARD
+			(BOARD_NO
+			, ESTER_EMPNO
+			, BOARD_NM
+			, BKMK)
+		VALUES(#{boardNo}
+				, #{esterEmpno}
+				, #{boardNm}
+				, 'N')
+	</insert>
+	<!-- 보드 공유자 추가 -->
+	<insert id="addBoardCocnr" parameterType="todoVO">
+		INSERT
+			INTO
+			TB_BOARD_COCNR
+			(BOARD_NO
+			, COCNR_EMPNO)
+		VALUES
+			(#{boardNo}
+			, #{cocnrEmpno})
+	</insert>
+	
+	<update id="updateBkmk" parameterType="hashMap">
+		UPDATE TB_TODO_BOARD
+		SET 
+			BKMK = #{bkmk}
+		WHERE
+			BOARD_NO = #{boardNo}
+	</update>
+</mapper>

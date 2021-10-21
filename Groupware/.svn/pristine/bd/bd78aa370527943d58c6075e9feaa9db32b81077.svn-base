@@ -1,0 +1,64 @@
+package kr.or.ddit.EA.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import kr.or.ddit.EA.mapper.EAMapper;
+import kr.or.ddit.EA.service.EAService;
+import kr.or.ddit.EA.vo.DrftVO;
+import kr.or.ddit.file.mapper.FileMapper;
+import kr.or.ddit.file.vo.FileVO;
+import kr.or.ddit.login.vo.EmpVO;
+import kr.or.ddit.login.vo.EmpVOList;
+
+@Service
+public class EAServiceImpl implements EAService{
+
+	@Autowired
+	private EAMapper eaMapper;
+	
+	@Autowired
+	private FileMapper fileMapper;
+
+	@Override
+	public int insert(EmpVOList empVoList, DrftVO drftVo) {
+		
+		// 첨부파일 없으면 종료
+	      if(drftVo.getFileList()==null || drftVo.getFileList().size() <= 0) {
+	    	  
+	      }else {
+	         int fileNo = fileMapper.fileNo();
+	         drftVo.setFileNo(fileNo+"");
+	         for(FileVO fileVo : drftVo.getFileList()) {
+	            fileVo.setFileNo(fileNo);
+	            System.out.println("서비스 임플 : " + fileVo.getFileSize());
+	            System.out.println(fileVo.getFileOrginlNm());
+	            fileMapper.fileInsert(fileVo);
+	         }
+	      }
+	      
+		
+		String lineNo = eaMapper.lastLineNo();
+		int c = 0;
+		for(EmpVO empVo : empVoList.getEmpVoList()) {
+			String ordr = c + "";
+			empVo.setOrdr(ordr);
+			empVo.setLineNo(lineNo);
+			eaMapper.lineInsert(empVo);
+			c++;
+		}
+		drftVo.setSanctnNo(lineNo);
+		eaMapper.drftInsert(drftVo);
+		
+		
+		return c;
+	}
+
+	@Override
+	public List<DrftVO> selectAll() {
+		return eaMapper.selectAll();
+	}
+	
+}
